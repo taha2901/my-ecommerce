@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/core/routings/routers.dart';
-import 'package:ecommerce_app/features/address/utils/app_colors.dart';
+import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/cart/logic/payment/payment_cubit.dart';
 import 'package:ecommerce_app/features/checkout/logic/cubit/checkout_cubit.dart';
 import 'package:flutter/material.dart';

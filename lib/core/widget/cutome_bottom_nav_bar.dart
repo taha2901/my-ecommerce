@@ -1,15 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_app/features/address/utils/app_colors.dart';
-import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/cart/ui/cart_page.dart';
 import 'package:ecommerce_app/features/favourite/ui/favourite_page.dart';
 import 'package:ecommerce_app/features/home/ui/home_page.dart';
 import 'package:ecommerce_app/features/profile/ui/profile_page.dart';
-import 'package:ecommerce_app/features/search/logic/search_cubit.dart';
-import 'package:ecommerce_app/features/search/ui/search_page.dart';
+import 'package:ecommerce_app/gen/locale_keys.g.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class CustomBottomNavbar extends StatefulWidget {
@@ -42,25 +39,25 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.home),
-        title: "Home",
+        title: LocaleKeys.home.tr(),
         activeColorPrimary: Theme.of(context).primaryColor,
         inactiveColorPrimary: AppColors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.cart),
-        title: "Cart",
+        title: LocaleKeys.cart.tr(),
         activeColorPrimary: Theme.of(context).primaryColor,
         inactiveColorPrimary: AppColors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.heart),
-        title: "Favorites",
+        title: LocaleKeys.favorites.tr(),
         activeColorPrimary: Theme.of(context).primaryColor,
         inactiveColorPrimary: AppColors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.person),
-        title: "Profile",
+        title: LocaleKeys.profile.tr(),
         activeColorPrimary: Theme.of(context).primaryColor,
         inactiveColorPrimary: AppColors.grey,
       ),
@@ -71,66 +68,7 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: currentIndex == 3
-          ? null
-          : PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: AppBar(
-                leading: currentIndex == 3
-                    ? null
-                    : Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: CachedNetworkImageProvider(
-                              'https://marketplace.canva.com/EAFMdLQAxDU/1/0/1600w/canva-white-and-gray-modern-real-estate-modern-home-banner-NpQukS8X1oo.jpg'),
-                        ),
-                      ),
-                title: currentIndex == 3
-                    ? null
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Taha Hamada',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          Text(
-                            'Let\'s go shopping!',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .copyWith(
-                                  color: Colors.grey,
-                                ),
-                          ),
-                        ],
-                      ),
-                actions: [
-                  if (currentIndex == 0) ...[
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider(
-                              create: (context) => SearchCubit(),
-                              child: SearchPage(),
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.search),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.notifications),
-                    ),
-                  ] else if (currentIndex == 1)
-                    IconButton(onPressed: () {}, icon: Icon(Icons.shopping_bag))
-                ],
-              ),
-            ),
+      extendBody: true,
       body: PersistentTabView(
         context,
         controller: _controller,
@@ -142,7 +80,19 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
           });
         },
         items: _navBarsItems(),
-        navBarStyle: NavBarStyle.style6,
+        navBarStyle: NavBarStyle.style9,
+        backgroundColor: Colors.white,
+        decoration: NavBarDecoration(
+          colorBehindNavBar: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
       ),
     );
   }

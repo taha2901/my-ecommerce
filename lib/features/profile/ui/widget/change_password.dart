@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/main_button.dart';
 import 'package:ecommerce_app/features/profile/logic/change_password_cubit/change_pass_cubit.dart';
 import 'package:ecommerce_app/features/profile/logic/change_password_cubit/change_pass_state.dart';
+import 'package:ecommerce_app/gen/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -22,7 +24,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return BlocProvider(
       create: (_) => ChangePasswordCubit(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Change Password')),
+        appBar: AppBar(title:  Text(LocaleKeys.change_password.tr())),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
@@ -45,8 +47,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   TextField(
                     controller: currentPasswordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Current Password',
+                    decoration:  InputDecoration(
+                      labelText: LocaleKeys.currentPassword.tr(),
                       prefixIcon: Icon(Iconsax.lock),
                     ),
                   ),
@@ -54,8 +56,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   TextField(
                     controller: newPasswordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'New Password',
+                    decoration:  InputDecoration(
+                      labelText: LocaleKeys.new_password.tr(),
                       prefixIcon: Icon(Iconsax.lock_1),
                     ),
                   ),
@@ -63,8 +65,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   TextField(
                     controller: confirmPasswordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                    decoration:  InputDecoration(
+                      labelText:  LocaleKeys.confirm_password.tr(),
                       prefixIcon: Icon(Iconsax.lock),
                     ),
                   ),
@@ -78,7 +80,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         confirmPasswordController.text.trim(),
                       );
                     },
-                    text: 'Update Password',
+                    text:  LocaleKeys.change_password.tr(),
                   ),
                 ],
               );

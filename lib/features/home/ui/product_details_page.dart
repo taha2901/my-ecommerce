@@ -1,6 +1,7 @@
-import 'package:ecommerce_app/features/address/utils/app_colors.dart';
+import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widget/loading_indicator.dart';
 import 'package:ecommerce_app/core/widget/message_display.dart';
+import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/home/data/product_items_model.dart';
 import 'package:ecommerce_app/features/home/logic/products_details_cubit/product_details_cubit.dart';
 import 'package:ecommerce_app/features/home/ui/widget/product_details/product_counter_bloc_builder.dart';
@@ -237,4 +238,5 @@ class ProductDetailsPage extends StatelessWidget {
       },
     );
   }
+
 }

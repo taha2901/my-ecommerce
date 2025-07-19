@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../utils/app_colors.dart';
+import '../../../core/utils/app_colors.dart';
 import '../../cart/ui/widget/main_button.dart';
 import '../logic/cubit/address_cubit.dart';
 import 'widget/location_item_widget.dart';

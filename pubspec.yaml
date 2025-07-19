@@ -32,6 +32,11 @@ dependencies:
   flutter_credit_card: ^4.1.0
   font_awesome_flutter: ^10.8.0
   flutter_rating_bar: ^4.0.1
+  google_fonts: ^6.2.1
+  easy_localization: ^3.0.7+1
+  build_runner: ^2.5.4
+  flutter_screenutil: ^5.9.3
+  google_generative_ai: ^0.4.7
 
 dev_dependencies:
   flutter_test:
@@ -41,4 +46,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-  #   - images/a_dot_ham.jpeg
+    - assets/lang/

@@ -36,6 +36,7 @@ class HomeCubit extends Cubit<HomeState> {
         products: finalProducts,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(HomeError("Error: $e"));
     }
   }

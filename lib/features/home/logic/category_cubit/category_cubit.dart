@@ -16,6 +16,7 @@ class CategoryCubit extends Cubit<CategoryState> {
 
       emit(CategoryLoaded(category: selectedCategory));
     } catch (e) {
+      if (isClosed) return;
       emit(CategoryError(message: "Error: $e"));
     }
   }

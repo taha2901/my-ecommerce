@@ -1,16 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce_app/features/home/logic/category_cubit/category_cubit.dart';
 import 'package:ecommerce_app/features/home/logic/category_cubit/category_state.dart';
+import 'package:ecommerce_app/gen/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class CategoryTabView extends StatelessWidget {
   const CategoryTabView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoryCubit,  CategoryState>(
+    return BlocBuilder<CategoryCubit, CategoryState>(
       builder: (context, state) {
-        if (state is  CategoryLoading) {
+        if (state is CategoryLoading) {
           return const Center(
             child: CircularProgressIndicator.adaptive(),
           );
@@ -46,7 +47,7 @@ class CategoryTabView extends StatelessWidget {
                                 ),
                           ),
                           Text(
-                            '${category.productsCount} Products', 
+                            '${category.productsCount} ${tr(LocaleKeys.products)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -66,8 +67,8 @@ class CategoryTabView extends StatelessWidget {
         } else if (state is CategoryError) {
           return Center(child: Text(state.message));
         }
-    
-        return const Center(child: Text("No categories available."));
+        
+        return Center(child: Text(tr(LocaleKeys.noCategories)));
       },
     );
   }

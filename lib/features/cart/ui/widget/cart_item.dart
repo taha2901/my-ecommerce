@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_app/features/address/utils/app_colors.dart';
+import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/home/data/add_to_cart.dart';
 import 'package:ecommerce_app/features/home/ui/widget/product_details/counter_widget.dart';

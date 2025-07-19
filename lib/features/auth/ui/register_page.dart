@@ -2,7 +2,7 @@ import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/routings/routers.dart';
-import '../../address/utils/app_colors.dart';
+import '../../../core/utils/app_colors.dart';
 import '../../cart/ui/widget/main_button.dart';
 import 'widget/label_with_text_field.dart';
 import 'widget/social_media_button.dart';

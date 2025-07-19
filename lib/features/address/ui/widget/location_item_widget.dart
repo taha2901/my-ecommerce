@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/app_colors.dart';
+import '../../../../core/utils/app_colors.dart';
 import '../../data/location_item_model.dart';
 import '../../logic/cubit/address_cubit.dart';
 

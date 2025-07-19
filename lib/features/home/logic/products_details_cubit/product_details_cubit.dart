@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce_app/core/services/auth_services.dart';
 import 'package:ecommerce_app/core/services/product_details_services.dart';
+import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/home/data/add_to_cart.dart';
 import 'package:ecommerce_app/features/home/data/product_items_model.dart';
 import 'package:flutter/widgets.dart';
@@ -64,6 +65,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
           cartItem, authServices.currentUser()!.uid);
 
       debugPrint("Product added to cart successfully");
+      BlocProvider.of<CartCubit>(context).getCartItems();
 
       emit(ProductAddedToCart(productId: productId));
     } catch (e) {

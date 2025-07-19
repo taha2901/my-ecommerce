@@ -5,6 +5,7 @@ import 'package:ecommerce_app/features/home/ui/widget/home/product_item.dart';
 import 'package:ecommerce_app/features/home/ui/widget/home/see_all_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeTabView extends StatelessWidget {
   const HomeTabView({super.key});
@@ -22,39 +23,40 @@ class HomeTabView extends StatelessWidget {
           );
         } else if (state is HomeLoaded) {
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                ProductImageCarousel(
-                  state: state,
-                ),
-                const SizedBox(height: 24.0),
-                SeeAllSectionHeader(),
-                const SizedBox(height: 16.0),
-                GridView.builder(
-                  itemCount: state.products.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 25,
-                    crossAxisSpacing: 10,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Column(
+                children: [
+                  ProductImageCarousel(
+                    state: state,
                   ),
-                  itemBuilder: (context, index) {
-                    // debugPrint('state.products[index].id: ${state.products[index].id}');
-                    return InkWell(
-                      onTap: () {
-                        //  debugPrint('state.products[index].id: ${state.products[index].id}');
-                        Navigator.of(context, rootNavigator: true).pushNamed(
-                            Routers.productDetailsRoute,
-                            arguments:  state.products[index].id);
-                      },
-                      child: ProductItem(
-                        productItem: state.products[index],
-                      ),
-                    );
-                  },
-                ),
-              ],
+                   SizedBox(height: 24.0.h),
+                  SeeAllSectionHeader(),
+                   SizedBox(height: 16.0.h),
+                  GridView.builder(
+                    itemCount: state.products.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 25,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).pushNamed(
+                              Routers.productDetailsRoute,
+                              arguments:  state.products[index].id);
+                        },
+                        child: ProductItem(
+                          productItem: state.products[index],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         } else if (state is HomeError) {
