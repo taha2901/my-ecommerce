@@ -49,7 +49,7 @@ class CustomHomeHeader extends StatelessWidget {
                   size: 17,
                 ),
                 MyTextApp(
-                  title: 'Mohammed Rageh',
+                  title: 'Taha Hamada',
                   color: AppColors.kBlackColor,
                   size: 20,
                   // fontWeight: FontWeightHelper.regular,
