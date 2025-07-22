@@ -1,39 +1,3 @@
-// import 'package:ecommerce_app/core/helper/constants.dart';
-// import 'package:ecommerce_app/core/services/firestore_services.dart';
-// import 'package:ecommerce_app/features/auth/data/user_data.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-
-// class UserServices {
-//   final _firestoreServices = FirestoreServices.instance;
-
-//   Future<UserData> fetchUserData() async {
-//     final uid = FirebaseAuth.instance.currentUser!.uid;
-//     return await _firestoreServices.getDocument<UserData>(
-//       path: ApiPaths.users(uid),
-//       builder: (data, id) => UserData.fromMap(data, id),
-//     );
-//   }
-
-//   Future<void> updateUserData(UserData userData) async {
-//     final currentUser = FirebaseAuth.instance.currentUser;
-
-//     // ✅ Update email in Firebase Authentication
-//     if (userData.email != currentUser!.email) {
-//       await currentUser.updateEmail(userData.email);
-//     }
-
-//     // ✅ Update displayName (username) in Firebase Authentication
-//     if (userData.username != currentUser.displayName) {
-//       await currentUser.updateDisplayName(userData.username);
-//     }
-
-//     // ✅ Update Firestore
-//     await _firestoreServices.setData(
-//       path: ApiPaths.users(userData.id),
-//       data: userData.toMap(),
-//     );
-//   }
-// }
 
 import 'package:ecommerce_app/core/helper/constants.dart';
 import 'package:ecommerce_app/core/services/firestore_services.dart';
