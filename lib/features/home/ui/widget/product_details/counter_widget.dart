@@ -2,7 +2,6 @@ import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/home/data/add_to_cart.dart';
 import 'package:flutter/material.dart';
 
-
 class CounterWidget extends StatelessWidget {
   final int value;
   final String? productId;

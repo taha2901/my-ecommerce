@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:ecommerce_app/core/services/auth_services.dart';
 import 'package:ecommerce_app/core/services/cart_services.dart';
 import 'package:ecommerce_app/core/services/product_details_services.dart';
@@ -6,7 +5,6 @@ import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/home/data/add_to_cart.dart';
 import 'package:ecommerce_app/features/home/data/product_items_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'product_details_state.dart';
@@ -79,6 +77,11 @@ part 'product_details_state.dart';
 
 
 
+
+
+//===================================================
+
+
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   ProductDetailsCubit() : super(ProductDetailsInitial());
 
@@ -118,10 +121,9 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     }
   }
 
-  // التحقق من وجود المنتج في الكارت مع نفس الحجم
-  bool isProductInCart(String productId, ProductSize size) {
-    return currentCartItems.any((item) => 
-        item.product.id == productId && item.size == size);
+  // التحقق من وجود المنتج في الكارت (بأي حجم)
+  bool isProductInCart(String productId) {
+    return currentCartItems.any((item) => item.product.id == productId);
   }
 
   void incrementCounter(String productId) {
@@ -149,11 +151,11 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       return;
     }
 
-    // التحقق من وجود المنتج مع نفس الحجم في الكارت
-    if (isProductInCart(productId, selectedSize!)) {
+    // التحقق من وجود المنتج في الكارت (بأي حجم)
+    if (isProductInCart(productId)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('This product with size ${selectedSize!.name} is already in your cart'),
+        const SnackBar(
+          content: Text('This product is already in your cart'),
           backgroundColor: Colors.orange,
         ),
       );
