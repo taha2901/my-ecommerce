@@ -24,6 +24,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
   }
 
+// في صفحة الهوم
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // إعادة تحميل البيانات عند الرجوع للصفحة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeCubit>().getHomeData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: SafeArea(
         child: Column(
           children: [
-            CustomHomeHeader(
-            
-            ),
+            CustomHomeHeader(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -43,7 +51,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     controller: _tabController,
                     unselectedLabelColor: AppColors.grey,
                     tabs: [
-                      Tab(text:LocaleKeys.home.tr()),
+                      Tab(text: LocaleKeys.home.tr()),
                       Tab(text: LocaleKeys.category.tr()),
                     ],
                   ),

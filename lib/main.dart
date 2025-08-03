@@ -13,9 +13,6 @@ void main() async {
   // 1️⃣ Stripe config
   Stripe.publishableKey = ApiKeys.publicKey;
 
-  // Optional: إعداد واجهة الدفع
-  // await Stripe.instance.applySettings();
-
   // 2️⃣ Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -40,32 +37,3 @@ void main() async {
     ),
   );
 }
-
-
-
-/*
-
-// في Firestore Rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // قواعد المستخدمين
-    match /users/{userId} {
-      allow read, write: if request.auth != null && 
-        (request.auth.uid == userId || isAdmin());
-      
-      // دالة للتحقق من كون المستخدم أدمن
-      function isAdmin() {
-        return request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superAdmin'];
-      }
-    }
-    
-    // قواعد المنتجات
-    match /products/{productId} {
-      allow read: if true; // الكل يقدر يقرأ المنتجات
-      allow write: if request.auth != null && isAdmin();
-    }
-  }
-}
-*/

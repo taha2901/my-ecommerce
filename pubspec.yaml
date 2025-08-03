@@ -37,32 +37,8 @@ dependencies:
   build_runner: ^2.5.4
   flutter_screenutil: ^5.9.3
   google_generative_ai: ^0.4.7
-  flutter_native_splash: ^2.4.6
   firebase_messaging: ^15.2.10
   cloud_functions: ^5.6.2
-
-
-flutter_native_splash:
-  # لون الخلفية (يمكنك استخدام لون التطبيق الأساسي)
-  color: "#6C63FF"
-  image: assets/images/splash_logo.png
-  # حجم الصورة
-  image_width: 200
-  image_height: 200
-  
-  # إعدادات Android
-  android_12:
-    # لون الخلفية لـ Android 12+
-    color: "#6C63FF"
-    image: assets/images/splash_logo.png
-    image_width: 200
-    image_height: 200
-    
-  # إعدادات iOS
-  ios: true
-  
-  # إزالة الشاشة الافتراضية لـ Flutter
-  remove_flutter_default_splash: true
 
 
 dev_dependencies:
