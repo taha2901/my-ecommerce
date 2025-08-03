@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/home/data/add_to_cart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CounterWidget extends StatelessWidget {
   final int value;
@@ -36,32 +37,31 @@ class CounterWidget extends StatelessWidget {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.grey2,
         borderRadius: const BorderRadius.all(
-          Radius.circular(30),
+          Radius.circular(10),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () => cartItem != null ? decrementCounter(cartItem) : decrementCounter(productId),
-              icon: const Icon(Icons.remove),
-            ),
-            Text(value.toString()),
-            IconButton(
-              onPressed: () => cartItem != null ? incrementCounter(cartItem) : incrementCounter(productId),
-              icon: const Icon(Icons.add),
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => cartItem != null
+                ? decrementCounter(cartItem)
+                : decrementCounter(productId),
+            icon: const Icon(Icons.remove),
+          ),
+          Text(value.toString()),
+          IconButton(
+            onPressed: () => cartItem != null
+                ? incrementCounter(cartItem)
+                : incrementCounter(productId),
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

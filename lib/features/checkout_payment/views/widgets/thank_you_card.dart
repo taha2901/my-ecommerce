@@ -1,103 +1,166 @@
-
-import 'package:ecommerce_app/core/utils/styles.dart';
+import 'package:ecommerce_app/core/widget/spacing.dart';
 import 'package:ecommerce_app/features/checkout_payment/views/widgets/card_info_widget.dart';
 import 'package:ecommerce_app/features/checkout_payment/views/widgets/payment_info_item.dart';
 import 'package:ecommerce_app/features/checkout_payment/views/widgets/total_price_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ThankYouCard extends StatelessWidget {
   final String total;
   const ThankYouCard({
-    super.key, required this.total, 
+    super.key,
+    required this.total,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: ShapeDecoration(
-        color: const Color(0xFFEDEDED),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            spreadRadius: 3,
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 50 + 16, left: 22, right: 22),
+        padding:
+             EdgeInsets.only(top: 66.h, left: 24.w, right: 24.w, bottom: 12.h),
         child: Column(
           children: [
-            const Text(
-              'Thank you!',
+            // Success message
+            Text(
+              '🎉 Thank you!',
               textAlign: TextAlign.center,
-              style: Styles.style25,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
             ),
+            verticalSpace(8),
             Text(
               'Your transaction was successful',
               textAlign: TextAlign.center,
-              style: Styles.style20,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            const SizedBox(
-              height: 42,
+            verticalSpace(16),
+
+            // Transaction details in a card
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey[200]!),
+              ),
+              child: Column(
+                children: [
+                  PaymentItemInfo(
+                    title: 'Date',
+                    value: '01/24/2023',
+                    icon: Icons.calendar_today_rounded,
+                  ),
+                  verticalSpace(8),
+                  PaymentItemInfo(
+                    title: 'Time',
+                    value: '10:15 AM',
+                    icon: Icons.access_time_rounded,
+                  ),
+                ],
+              ),
             ),
-            const PaymentItemInfo(
-              title: 'Date',
-              value: '01/24/2023',
+
+            verticalSpace(12),
+            // Total amount highlight
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).primaryColor.withOpacity(0.1),
+                    Theme.of(context).primaryColor.withOpacity(0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
+                ),
+              ),
+              child: TotalPrice(title: 'Total Amount', value: '\$total'),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            const PaymentItemInfo(
-              title: 'Time',
-              value: '10:15 AM',
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const PaymentItemInfo(
-              title: 'To',
-              value: 'Sam Louis',
-            ),
-            const Divider(
-              height: 60,
-              thickness: 2,
-            ),
-            // const TotalPrice(title: 'Total', value: r'${50.97}'),
-            TotalPrice(title: 'Total', value: total),
-            const SizedBox(
-              height: 30,
-            ),
-            const CardInfoWidget(),
-            const Spacer(),
+
+            verticalSpace(16),
+            CardInfoWidget(),
+            verticalSpace(24),
+
+            // Bottom section with barcode and PAID badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(
-                  FontAwesomeIcons.barcode,
-                  size: 64,
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    FontAwesomeIcons.barcode,
+                    size: 48,
+                    color: Colors.grey[600],
+                  ),
                 ),
                 Container(
-                  width: 113,
-                  height: 58,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 1.50, color: Color(0xFF34A853)),
-                      borderRadius: BorderRadius.circular(15),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF34A853),
+                        const Color(0xFF34A853).withOpacity(0.8),
+                      ],
                     ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF34A853).withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  child: Center(
-                    child: Text(
-                      'PAID',
-                      textAlign: TextAlign.center,
-                      style: Styles.style24
-                          .copyWith(color: const Color(0xff34A853)),
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.check_circle_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'PAID',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
               ],
-            ),
-            SizedBox(
-              height: ((MediaQuery.sizeOf(context).height * .2 + 20) / 2) - 29,
             ),
           ],
         ),
