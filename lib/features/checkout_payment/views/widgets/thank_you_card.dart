@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ThankYouCard extends StatelessWidget {
-  // final String? passedAmount;
+  final String total;
   const ThankYouCard({
-    super.key, 
+    super.key, required this.total, 
   });
 
   @override
@@ -62,7 +62,7 @@ class ThankYouCard extends StatelessWidget {
               thickness: 2,
             ),
             // const TotalPrice(title: 'Total', value: r'${50.97}'),
-            TotalPrice(title: 'Total', value: '100'),
+            TotalPrice(title: 'Total', value: total),
             const SizedBox(
               height: 30,
             ),

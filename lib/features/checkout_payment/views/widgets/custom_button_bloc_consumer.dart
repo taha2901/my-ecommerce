@@ -7,19 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/manger/payment_cubit.dart';
 
 class CustomButtonBlocConsumer extends StatelessWidget {
-  final String? passedAmount;
-  const CustomButtonBlocConsumer({super.key, this.passedAmount});
+  final double total;
+  const CustomButtonBlocConsumer({super.key, required this.total,});
 
   @override
   Widget build(BuildContext context) {
+     debugPrint('Total amount in CustomButtonBlocConsumer: $total');
     return BlocConsumer<PaymenttCubit, PaymentState>(
       listener: (context, state) {
         if (state is PaymentSuccess) {
-          debugPrint('passed amount in custom button blco consumer in thank view page is ${passedAmount}');
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) {
-                return  ThankYouView();
+                return  ThankYouView(total: total.toStringAsFixed(2),);
               },
             ),
           );
@@ -35,10 +35,9 @@ class CustomButtonBlocConsumer extends StatelessWidget {
       builder: (context, state) {
         return CustomButton(
           onTap: () {
-            debugPrint('passed amount in custom button bloc consumer in button is ${passedAmount}');
             PaymentIntentInputModel paymentIntentInputModel =
                 PaymentIntentInputModel(
-                  amount: passedAmount ?? '0', 
+                  amount: '${(total).toInt()}', 
                   currency: 'USD',
                   cusomerId: 'cus_SCZxTwXxxe7kWr',
                 );

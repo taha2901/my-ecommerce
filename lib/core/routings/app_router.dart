@@ -11,12 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/ui/login_page.dart';
 
+// checkoutRoute
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     final arguments = settings.arguments;
     switch (settings.name) {
-      // case Routers.splashRoute:
-      //   return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routers.homeRoute:
         return MaterialPageRoute(
           builder: (_) => const CustomBottomNavbar(),
@@ -41,7 +40,7 @@ class AppRouter {
       //       child: const AdminDashboardScreen(),
       //     ),
       //   );
-      
+
       // case Routers.adminProductsRoute:
       //   return MaterialPageRoute(
       //     builder: (context) => AdminGuard(
@@ -50,11 +49,7 @@ class AppRouter {
       //     ),
       //   );
 
-      // case Routers.checkoutRoute:
-      //   final totalAmount = settings.arguments as String;
-      //   return MaterialPageRoute(
-      //     builder: (_) => CheckoutPage(totalAmount: totalAmount),
-      //   );
+
 
       case Routers.chooseLocation:
         return MaterialPageRoute(

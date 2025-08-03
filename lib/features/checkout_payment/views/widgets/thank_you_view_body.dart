@@ -5,8 +5,8 @@ import 'package:ecommerce_app/features/checkout_payment/views/widgets/thank_you_
 import 'package:flutter/material.dart';
 
 class ThankYouViewBody extends StatelessWidget {
-  // final String? passedAmount;
-  const ThankYouViewBody({super.key, });
+  final String total;
+  const ThankYouViewBody({super.key, required this.total, });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ThankYouViewBody extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-           ThankYouCard(),
+           ThankYouCard(total: total,),
           Positioned(
             bottom: MediaQuery.sizeOf(context).height * .2 + 20,
             left: 20 + 8,

@@ -1,9 +1,11 @@
-import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/core/widget/custom_app_bar.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/cart_item.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/empty_cart.dart';
+import 'package:ecommerce_app/features/checkout_payment/data/repos/checkout_repo_impl.dart';
+import 'package:ecommerce_app/features/checkout_payment/presentation/manger/payment_cubit.dart';
+import 'package:ecommerce_app/features/checkout_payment/views/widgets/payment_methods_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -151,6 +153,10 @@ class CartPage extends StatelessWidget {
   }
 
   Widget _buildCheckoutButton(BuildContext context, CartLoaded state) {
+    final subtotal = state.subtotal;
+    final shipping = 10.0;
+    final total = subtotal + shipping;
+    debugPrint('Total amount in checkout page: $total');
     return Padding(
       padding: EdgeInsets.all(16.w),
       child: SizedBox(
@@ -158,10 +164,16 @@ class CartPage extends StatelessWidget {
         height: 56.h,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).pushNamed(
-              Routers.checkoutRoute,
-              arguments: (state.subtotal + 10).toString(),
-            );
+            showModalBottomSheet(
+                context: context,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                builder: (context) {
+                  return BlocProvider(
+                    create: (context) => PaymenttCubit(CheckoutRepoImpl()),
+                    child: PaymentMethodsBottomSheet(total: total,),
+                  );
+                });
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).primaryColor,

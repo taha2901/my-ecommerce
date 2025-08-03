@@ -14,7 +14,7 @@ void main() async {
   Stripe.publishableKey = ApiKeys.publicKey;
 
   // Optional: إعداد واجهة الدفع
-  await Stripe.instance.applySettings();
+  // await Stripe.instance.applySettings();
 
   // 2️⃣ Firebase
   await Firebase.initializeApp(
