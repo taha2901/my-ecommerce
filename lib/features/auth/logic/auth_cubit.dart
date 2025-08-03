@@ -26,6 +26,33 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // Future<void> loginWithEmailAndPassword(String email, String password) async {
+  //   emit(AuthLoading());
+  //   try {
+  //     final result =
+  //         await authServices.loginWithEmailAndPassword(email, password);
+  //     if (result) {
+  //       final user = authServices.currentUser();
+  //       if (user != null) {
+  //         final userDoc = await firestoreServices.getDocument<UserData>(
+  //           path: ApiPaths.users(user.uid),
+  //           builder: (data, id) => UserData.fromMap(data, id),
+  //         );
+
+  //         final role = userDoc.role;
+
+  //         emit(AuthDoneWithRole(role)); // ✅ جديد
+  //       } else {
+  //         emit(AuthError(message: "User not found"));
+  //       }
+  //     } else {
+  //       emit(AuthError(message: "Invalid email or password"));
+  //     }
+  //   } catch (e) {
+  //     emit(AuthError(message: "Error: $e"));
+  //   }
+  // }
+
   Future<void> registerWithEmailAndPassword(
       String email, String password, String username) async {
     emit(AuthLoading());
@@ -33,7 +60,11 @@ class AuthCubit extends Cubit<AuthState> {
       final result =
           await authServices.registerWithEmailAndPassword(email, password);
       if (result) {
-        await _saveUserData(email, username);
+        // await _saveUserData(email, username, role: "user");
+        await _saveUserData(
+          email,
+          username,
+        );
         emit(AuthDone());
       } else {
         emit(AuthError(message: "Invalid email or password"));
@@ -57,6 +88,22 @@ class AuthCubit extends Cubit<AuthState> {
       data: userData.toMap(),
     );
   }
+  // Future<void> _saveUserData(String email, String username,
+  //     {String role = "user"}) async {
+  //   final currentUser = authServices.currentUser();
+  //   final userData = UserData(
+  //     id: currentUser!.uid,
+  //     username: username,
+  //     email: email,
+  //     createdAt: DateTime.now().toIso8601String(),
+  //     role: role,
+  //   );
+
+  //   await firestoreServices.setData(
+  //     path: ApiPaths.users(userData.id),
+  //     data: userData.toMap(),
+  //   );
+  // }
 
   void checkAuth() {
     final user = authServices.currentUser();

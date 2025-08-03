@@ -10,13 +10,25 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 // cart -> checkout -> PaymentMethodsBottomSheet -> CustomButtonBlocConsumer
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ScreenUtil.ensureScreenSize();
+  // 1️⃣ Stripe config
   Stripe.publishableKey = ApiKeys.publicKey;
-  await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
 
+  // Optional: إعداد واجهة الدفع
+  await Stripe.instance.applySettings();
+
+  // 2️⃣ Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // 3️⃣ Localization
+  await EasyLocalization.ensureInitialized();
+
+  // 4️⃣ ScreenUtil
+  await ScreenUtil.ensureScreenSize();
+  
+
+ 
   runApp(
     EasyLocalization(
       path: 'assets/lang',
@@ -28,3 +40,32 @@ void main() async {
     ),
   );
 }
+
+
+
+/*
+
+// في Firestore Rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // قواعد المستخدمين
+    match /users/{userId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+      
+      // دالة للتحقق من كون المستخدم أدمن
+      function isAdmin() {
+        return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superAdmin'];
+      }
+    }
+    
+    // قواعد المنتجات
+    match /products/{productId} {
+      allow read: if true; // الكل يقدر يقرأ المنتجات
+      allow write: if request.auth != null && isAdmin();
+    }
+  }
+}
+*/

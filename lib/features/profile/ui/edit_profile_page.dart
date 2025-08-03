@@ -86,6 +86,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               username: usernameController.text,
                               email: emailController.text,
                               createdAt: widget.user.createdAt,
+                              // role: widget.user.role,
                             );
                             context.read<UserCubit>().updateUser(updatedUser);
 

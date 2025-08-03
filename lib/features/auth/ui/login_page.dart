@@ -12,7 +12,7 @@ import 'package:iconsax/iconsax.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<AuthCubit>(context);
-    
+
     return Scaffold(
       backgroundColor: AppColors.kWhiteColor,
       body: SafeArea(
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 40.h),
-                          
+
                           // Logo Section with Animation
                           Center(
                             child: Container(
@@ -116,36 +116,42 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          
+
                           SizedBox(height: 32.h),
-                          
+
                           // Welcome Text
                           Center(
                             child: Column(
                               children: [
                                 Text(
                                   'مرحباً بك في ShopEase!',
-                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
                                   textAlign: TextAlign.center,
                                 ),
                                 SizedBox(height: 8.h),
                                 Text(
                                   'سجل دخولك للبدء في التسوق',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: AppColors.grey,
-                                    height: 1.5,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.grey,
+                                        height: 1.5,
+                                      ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
-                          
+
                           SizedBox(height: 40.h),
-                          
+
                           // Form Fields
                           _buildAnimatedTextField(
                             child: LabelWithTextField(
@@ -156,9 +162,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             ),
                             delay: 200,
                           ),
-                          
+
                           SizedBox(height: 20.h),
-                          
+
                           _buildAnimatedTextField(
                             child: LabelWithTextField(
                               label: 'كلمة المرور',
@@ -168,7 +174,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               obsecureText: isObscure,
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  isObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                  isObscure
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
                                   color: AppColors.grey,
                                 ),
                                 onPressed: () {
@@ -180,9 +188,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             ),
                             delay: 400,
                           ),
-                          
+
                           SizedBox(height: 16.h),
-                          
+
                           // Forgot Password
                           Align(
                             alignment: Alignment.centerRight,
@@ -190,7 +198,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               onPressed: () {},
                               style: TextButton.styleFrom(
                                 foregroundColor: AppColors.primary,
-                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w, vertical: 4.h),
                               ),
                               child: Text(
                                 'نسيت كلمة المرور؟',
@@ -201,18 +210,86 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          
+
                           SizedBox(height: 32.h),
-                          
+
                           // Login Button
+                          // BlocConsumer<AuthCubit, AuthState>(
+                          //   bloc: cubit,
+                          //   listenWhen: (previous, current) =>
+                          //       current is AuthDone || current is AuthError,
+                          //   listener: (context, state) {
+                          //     // if (state is AuthDone) {
+                          //     //   Navigator.of(context, rootNavigator: true)
+                          //     //       .pushNamed(Routers.homeRoute);
+                          //     // }
+                          //     if (state is AuthDoneWithRole) {
+                          //       if (state.role == 'admin') {
+                          //         Navigator.of(context).pushReplacementNamed(
+                          //             Routers.adminDashboardRoute);
+                          //       } else {
+                          //         Navigator.of(context)
+                          //             .pushReplacementNamed(Routers.homeRoute);
+                          //       }
+                          //     } else if (state is AuthError) {
+                          //       _showErrorSnackBar(context, state.message);
+                          //     }
+                          //   },
+                          //   buildWhen: (previous, current) =>
+                          //       current is AuthLoading ||
+                          //       current is AuthError ||
+                          //       current is AuthDone,
+                          //   builder: (context, state) {
+                          //     return Container(
+                          //       width: double.infinity,
+                          //       height: 56.h,
+                          //       decoration: BoxDecoration(
+                          //         gradient: LinearGradient(
+                          //           colors: [
+                          //             AppColors.primary,
+                          //             AppColors.primary.withOpacity(0.8),
+                          //           ],
+                          //         ),
+                          //         borderRadius: BorderRadius.circular(16.r),
+                          //         boxShadow: [
+                          //           BoxShadow(
+                          //             color: AppColors.primary.withOpacity(0.3),
+                          //             blurRadius: 12,
+                          //             offset: const Offset(0, 6),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       child: MainButton(
+                          //         text: 'تسجيل الدخول',
+                          //         isLoading: state is AuthLoading,
+                          //         onTap: () async {
+                          //           if (_formKey.currentState!.validate()) {
+                          //             await cubit.loginWithEmailAndPassword(
+                          //               emailController.text,
+                          //               passwordController.text,
+                          //             );
+                          //           }
+                          //         },
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+
                           BlocConsumer<AuthCubit, AuthState>(
                             bloc: cubit,
                             listenWhen: (previous, current) =>
-                                current is AuthDone || current is AuthError,
+                                current is AuthDoneWithRole ||
+                                current is AuthError,
                             listener: (context, state) {
-                              if (state is AuthDone) {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pushNamed(Routers.homeRoute);
+                              if (state is AuthDoneWithRole) {
+                                // ✅ تحديث التوجيه بناءً على الدور
+                                if (state.role == 'admin') {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      Routers.adminDashboardRoute);
+                                } else {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(Routers.homeRoute);
+                                }
                               } else if (state is AuthError) {
                                 _showErrorSnackBar(context, state.message);
                               }
@@ -220,7 +297,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             buildWhen: (previous, current) =>
                                 current is AuthLoading ||
                                 current is AuthError ||
-                                current is AuthDone,
+                                current
+                                    is AuthDoneWithRole, // ✅ تغيير من AuthDone إلى AuthDoneWithRole
                             builder: (context, state) {
                               return Container(
                                 width: double.infinity,
@@ -256,9 +334,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               );
                             },
                           ),
-                          
+
                           SizedBox(height: 32.h),
-                          
+
                           // Divider
                           Row(
                             children: [
@@ -272,10 +350,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                                 child: Text(
                                   'أو سجل دخولك باستخدام',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.grey,
-                                    fontSize: 14.sp,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.grey,
+                                        fontSize: 14.sp,
+                                      ),
                                 ),
                               ),
                               Expanded(
@@ -286,14 +367,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          
+
                           SizedBox(height: 24.h),
-                          
+
                           // Social Media Buttons
                           BlocConsumer<AuthCubit, AuthState>(
                             bloc: cubit,
                             listenWhen: (previous, current) =>
-                                current is GoogleAuthDone || current is GoogleAuthError,
+                                current is GoogleAuthDone ||
+                                current is GoogleAuthError,
                             listener: (context, state) {
                               if (state is GoogleAuthDone) {
                                 Navigator.of(context, rootNavigator: true)
@@ -305,7 +387,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             builder: (context, state) {
                               return _buildSocialButton(
                                 text: 'تسجيل الدخول بـ Google',
-                                imgUrl: 'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png',
+                                imgUrl:
+                                    'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png',
                                 isLoading: state is GoogleAuthunticated,
                                 onTap: () async {
                                   // await cubit.signInWithGoogle();
@@ -315,19 +398,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               );
                             },
                           ),
-                          
+
                           SizedBox(height: 16.h),
-                          
+
                           _buildSocialButton(
                             text: 'تسجيل الدخول بـ Facebook',
-                            imgUrl: 'https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-facebook-logo-png-transparent-svg-vector-bie-supply-15.png',
+                            imgUrl:
+                                'https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-facebook-logo-png-transparent-svg-vector-bie-supply-15.png',
                             onTap: () {},
                             color: Colors.blue.shade50,
                             borderColor: Colors.blue.shade100,
                           ),
-                          
+
                           SizedBox(height: 32.h),
-                          
+
                           // Register Link
                           Center(
                             child: Row(
@@ -335,9 +419,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               children: [
                                 Text(
                                   'ليس لديك حساب؟ ',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.grey.shade600,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Colors.grey.shade600,
+                                      ),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -346,7 +433,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   },
                                   style: TextButton.styleFrom(
                                     foregroundColor: AppColors.primary,
-                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4.w),
                                   ),
                                   child: Text(
                                     'سجل الآن',
@@ -359,7 +447,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
-                          
+
                           SizedBox(height: 24.h),
                         ],
                       ),
@@ -436,7 +524,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.red.shade600,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
         margin: EdgeInsets.all(16.w),
       ),
     );
