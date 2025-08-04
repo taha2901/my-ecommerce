@@ -214,75 +214,16 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           SizedBox(height: 32.h),
 
                           // Login Button
-                          // BlocConsumer<AuthCubit, AuthState>(
-                          //   bloc: cubit,
-                          //   listenWhen: (previous, current) =>
-                          //       current is AuthDone || current is AuthError,
-                          //   listener: (context, state) {
-                          //     // if (state is AuthDone) {
-                          //     //   Navigator.of(context, rootNavigator: true)
-                          //     //       .pushNamed(Routers.homeRoute);
-                          //     // }
-                          //     if (state is AuthDoneWithRole) {
-                          //       if (state.role == 'admin') {
-                          //         Navigator.of(context).pushReplacementNamed(
-                          //             Routers.adminDashboardRoute);
-                          //       } else {
-                          //         Navigator.of(context)
-                          //             .pushReplacementNamed(Routers.homeRoute);
-                          //       }
-                          //     } else if (state is AuthError) {
-                          //       _showErrorSnackBar(context, state.message);
-                          //     }
-                          //   },
-                          //   buildWhen: (previous, current) =>
-                          //       current is AuthLoading ||
-                          //       current is AuthError ||
-                          //       current is AuthDone,
-                          //   builder: (context, state) {
-                          //     return Container(
-                          //       width: double.infinity,
-                          //       height: 56.h,
-                          //       decoration: BoxDecoration(
-                          //         gradient: LinearGradient(
-                          //           colors: [
-                          //             AppColors.primary,
-                          //             AppColors.primary.withOpacity(0.8),
-                          //           ],
-                          //         ),
-                          //         borderRadius: BorderRadius.circular(16.r),
-                          //         boxShadow: [
-                          //           BoxShadow(
-                          //             color: AppColors.primary.withOpacity(0.3),
-                          //             blurRadius: 12,
-                          //             offset: const Offset(0, 6),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //       child: MainButton(
-                          //         text: 'تسجيل الدخول',
-                          //         isLoading: state is AuthLoading,
-                          //         onTap: () async {
-                          //           if (_formKey.currentState!.validate()) {
-                          //             await cubit.loginWithEmailAndPassword(
-                          //               emailController.text,
-                          //               passwordController.text,
-                          //             );
-                          //           }
-                          //         },
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-
                           BlocConsumer<AuthCubit, AuthState>(
                             bloc: cubit,
                             listenWhen: (previous, current) =>
-                                current is AuthDoneWithRole ||
-                                current is AuthError,
+                                current is AuthDone || current is AuthError,
                             listener: (context, state) {
+                              // if (state is AuthDone) {
+                              //   Navigator.of(context, rootNavigator: true)
+                              //       .pushNamed(Routers.homeRoute);
+                              // }
                               if (state is AuthDoneWithRole) {
-                                // ✅ تحديث التوجيه بناءً على الدور
                                 if (state.role == 'admin') {
                                   Navigator.of(context).pushReplacementNamed(
                                       Routers.adminDashboardRoute);
@@ -297,8 +238,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             buildWhen: (previous, current) =>
                                 current is AuthLoading ||
                                 current is AuthError ||
-                                current
-                                    is AuthDoneWithRole, // ✅ تغيير من AuthDone إلى AuthDoneWithRole
+                                current is AuthDone,
                             builder: (context, state) {
                               return Container(
                                 width: double.infinity,
@@ -334,6 +274,68 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               );
                             },
                           ),
+
+
+
+                          // BlocConsumer<AuthCubit, AuthState>(
+                          //   bloc: cubit,
+                          //   listenWhen: (previous, current) =>
+                          //       current is AuthDoneWithRole ||
+                          //       current is AuthError,
+                          //   listener: (context, state) {
+                          //     if (state is AuthDoneWithRole) {
+                          //       // ✅ تحديث التوجيه بناءً على الدور
+                          //       if (state.role == 'admin') {
+                          //         Navigator.of(context).pushReplacementNamed(
+                          //             Routers.adminDashboardRoute);
+                          //       } else {
+                          //         Navigator.of(context)
+                          //             .pushReplacementNamed(Routers.homeRoute);
+                          //       }
+                          //     } else if (state is AuthError) {
+                          //       _showErrorSnackBar(context, state.message);
+                          //     }
+                          //   },
+                          //   buildWhen: (previous, current) =>
+                          //       current is AuthLoading ||
+                          //       current is AuthError ||
+                          //       current
+                          //           is AuthDoneWithRole, // ✅ تغيير من AuthDone إلى AuthDoneWithRole
+                          //   builder: (context, state) {
+                          //     return Container(
+                          //       width: double.infinity,
+                          //       height: 56.h,
+                          //       decoration: BoxDecoration(
+                          //         gradient: LinearGradient(
+                          //           colors: [
+                          //             AppColors.primary,
+                          //             AppColors.primary.withOpacity(0.8),
+                          //           ],
+                          //         ),
+                          //         borderRadius: BorderRadius.circular(16.r),
+                          //         boxShadow: [
+                          //           BoxShadow(
+                          //             color: AppColors.primary.withOpacity(0.3),
+                          //             blurRadius: 12,
+                          //             offset: const Offset(0, 6),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       child: MainButton(
+                          //         text: 'تسجيل الدخول',
+                          //         isLoading: state is AuthLoading,
+                          //         onTap: () async {
+                          //           if (_formKey.currentState!.validate()) {
+                          //             await cubit.loginWithEmailAndPassword(
+                          //               emailController.text,
+                          //               passwordController.text,
+                          //             );
+                          //           }
+                          //         },
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
 
                           SizedBox(height: 32.h),
 

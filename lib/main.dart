@@ -23,9 +23,7 @@ void main() async {
 
   // 4️⃣ ScreenUtil
   await ScreenUtil.ensureScreenSize();
-  
 
- 
   runApp(
     EasyLocalization(
       path: 'assets/lang',

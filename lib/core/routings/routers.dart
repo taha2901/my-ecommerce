@@ -1,6 +1,5 @@
 class Routers {
   static const String loginRoute = '/';
-  static const String splashRoute = '/splash';
   static const String registerRoute = '/register';
   static const String homeRoute = '/homeRoute';
   static const String productDetailsRoute = '/product-details';
