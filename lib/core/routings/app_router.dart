@@ -4,7 +4,7 @@ import 'package:ecommerce_app/features/auth/ui/register_page.dart';
 import 'package:ecommerce_app/features/cart/ui/cart_page.dart';
 import 'package:ecommerce_app/features/home/logic/products_details_cubit/product_details_cubit.dart';
 import 'package:ecommerce_app/features/home/ui/product_details_page.dart';
-import 'package:ecommerce_app/features/profile/ui/widget/user_profile.dart';
+import 'package:ecommerce_app/features/profile/ui/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/ui/login_page.dart';

@@ -7,6 +7,7 @@ import 'package:ecommerce_app/features/checkout_payment/data/repos/checkout_repo
 import 'package:ecommerce_app/features/checkout_payment/presentation/manger/payment_cubit.dart';
 import 'package:ecommerce_app/features/favourite/logic/cubit/favourite_cubit.dart';
 import 'package:ecommerce_app/features/home/logic/home_cubit/home_cubit.dart';
+import 'package:ecommerce_app/features/profile/logic/user_cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (_) => PaymenttCubit( CheckoutRepoImpl())),
+              BlocProvider(create: (_) => UserCubit()..getUserData()),
               BlocProvider<LocationCubit>(
                 create: (context) => LocationCubit(),
               ),

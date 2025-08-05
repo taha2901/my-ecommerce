@@ -34,7 +34,7 @@
 //               ),
 //             ),
 //             SizedBox(height: 24.h),
-            
+
 //             // Header
 //             Row(
 //               children: [
@@ -63,10 +63,10 @@
 //               ),
 //             ),
 //             SizedBox(height: 32.h),
-            
+
 //             PaymentMethodsListView(),
 //             SizedBox(height: 32.h),
-            
+
 //             // Total amount display
 //             Container(
 //               width: double.infinity,
@@ -99,7 +99,7 @@
 //               ),
 //             ),
 //             SizedBox(height: 24.h),
-            
+
 //             CustomButtonBlocConsumer(total: total),
 //             SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
 //           ],
@@ -109,20 +109,20 @@
 //   }
 // }
 
-
 //=============================
 
+import 'package:ecommerce_app/core/services/order_services.dart';
 import 'package:ecommerce_app/features/checkout_payment/presentation/manger/payment_cubit.dart';
 import 'package:ecommerce_app/features/checkout_payment/views/widgets/custom_button_bloc_consumer.dart';
 import 'package:ecommerce_app/features/checkout_payment/views/widgets/payment_methods_list_view.dart';
 import 'package:ecommerce_app/features/location_picker/logic/location_cubit.dart';
 import 'package:ecommerce_app/features/location_picker/logic/location_state.dart';
 import 'package:ecommerce_app/features/location_picker/ui/location_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 
 class PaymentMethodsBottomSheet extends StatelessWidget {
   final double total;
@@ -164,14 +164,15 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 24.h),
-                  
+
                   // Header
                   Row(
                     children: [
                       Container(
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor.withOpacity(0.1),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
@@ -207,7 +208,7 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 32.h),
-    
+
                   // Delivery Location Section
                   _buildSectionHeader(
                     context,
@@ -216,32 +217,33 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                     isRequired: true,
                   ),
                   SizedBox(height: 16.h),
-                  
+
                   // Location Widget
                   BlocBuilder<LocationCubit, LocationState>(
                     builder: (context, locationState) {
                       return Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: locationState is LocationSelected 
-                              ? Colors.green[50] 
+                          color: locationState is LocationSelected
+                              ? Colors.green[50]
                               : Colors.grey[50],
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: locationState is LocationSelected 
-                                ? Colors.green[200]! 
+                            color: locationState is LocationSelected
+                                ? Colors.green[200]!
                                 : Colors.grey[200]!,
                           ),
                         ),
                         child: locationState is LocationSelected
-                            ? _buildSelectedLocationDisplay(context, locationState)
+                            ? _buildSelectedLocationDisplay(
+                                context, locationState)
                             : _buildLocationPrompt(context),
                       );
                     },
                   ),
-    
+
                   SizedBox(height: 32.h),
-    
+
                   // Payment Method Section
                   _buildSectionHeader(
                     context,
@@ -251,9 +253,9 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   PaymentMethodsListView(),
-                  
+
                   SizedBox(height: 32.h),
-    
+
                   // Order Summary
                   Container(
                     width: double.infinity,
@@ -301,7 +303,9 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                                 vertical: 6.h,
                               ),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -318,14 +322,14 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   SizedBox(height: 24.h),
-    
+
                   // Payment Button with Location Validation
                   BlocBuilder<LocationCubit, LocationState>(
                     builder: (context, locationState) {
                       bool hasLocation = locationState is LocationSelected;
-                      
+
                       return Container(
                         width: double.infinity,
                         height: 56.h,
@@ -335,7 +339,9 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                               ? LinearGradient(
                                   colors: [
                                     Theme.of(context).primaryColor,
-                                    Theme.of(context).primaryColor.withOpacity(0.8),
+                                    Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.8),
                                   ],
                                 )
                               : LinearGradient(
@@ -347,7 +353,9 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                           boxShadow: hasLocation
                               ? [
                                   BoxShadow(
-                                    color: Theme.of(context).primaryColor.withOpacity(0.3),
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.3),
                                     spreadRadius: 1,
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
@@ -357,13 +365,41 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: hasLocation
-                              ? () {
-                                  // Show confirmation dialog before proceeding
-                                  _showOrderConfirmation(context, locationState);
+                              ? () async {
+                                  
+                                  final selectedLocation =
+                                      locationState;
+
+                                  try {
+                                    await OrderServices().saveOrderLocation(
+                                      latitude:
+                                          selectedLocation.location.longitude,
+                                      longitude:
+                                          selectedLocation.location.latitude,
+                                      address: selectedLocation.address,
+                                    );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("تم حفظ موقع الطلب بنجاح")),
+                                    );
+                                    _showOrderConfirmation(context, locationState);
+
+                                    // تابع أي خطوات أخرى (زي التنقل للصفحة التالية)
+                                    // Navigator.push(...);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "حدث خطأ أثناء حفظ الموقع: $e")),
+                                    );
+                                  }
                                 }
                               : () {
                                   _showLocationRequiredDialog(context);
                                 },
+
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             foregroundColor: Colors.white,
@@ -377,12 +413,16 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                hasLocation ? Icons.lock_rounded : Icons.location_off,
+                                hasLocation
+                                    ? Icons.lock_rounded
+                                    : Icons.location_off,
                                 size: 20.sp,
                               ),
                               SizedBox(width: 8.w),
                               Text(
-                                hasLocation ? 'Complete Order' : 'Select Location First',
+                                hasLocation
+                                    ? 'Complete Order'
+                                    : 'Select Location First',
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
@@ -394,7 +434,7 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                       );
                     },
                   ),
-                  
+
                   SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
                 ],
               ),
@@ -449,7 +489,8 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectedLocationDisplay(BuildContext context, LocationSelected state) {
+  Widget _buildSelectedLocationDisplay(
+      BuildContext context, LocationSelected state) {
     return Padding(
       padding: EdgeInsets.all(16.w),
       child: Column(
@@ -484,7 +525,8 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           TextButton.icon(
-            onPressed: () => _openLocationPicker(context, state.location, state.address),
+            onPressed: () =>
+                _openLocationPicker(context, state.location, state.address),
             icon: Icon(Icons.edit_location_alt, size: 16.sp),
             label: Text(
               'Change Location',
@@ -619,7 +661,8 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
     );
   }
 
-  void _showOrderConfirmation(BuildContext context, LocationSelected locationState) {
+  void _showOrderConfirmation(
+      BuildContext context, LocationSelected locationState) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -666,7 +709,8 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.location_on, size: 16.sp, color: Colors.grey[600]),
+                      Icon(Icons.location_on,
+                          size: 16.sp, color: Colors.grey[600]),
                       SizedBox(width: 8.w),
                       Text(
                         'Delivery to:',
@@ -689,7 +733,8 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Row(
                     children: [
-                      Icon(Icons.attach_money, size: 16.sp, color: Colors.grey[600]),
+                      Icon(Icons.attach_money,
+                          size: 16.sp, color: Colors.grey[600]),
                       SizedBox(width: 8.w),
                       Text(
                         'Total Amount:',

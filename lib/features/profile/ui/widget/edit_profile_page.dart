@@ -1,7 +1,9 @@
+import 'package:ecommerce_app/core/widget/spacing.dart';
 import 'package:ecommerce_app/features/auth/data/user_data.dart';
 import 'package:ecommerce_app/features/auth/ui/widget/login_customs/label_with_text_field.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_cubit.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_states.dart';
+import 'package:ecommerce_app/features/profile/ui/widget/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -49,21 +51,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(children: [
-              const SizedBox(height: 20),
+              verticalSpace(20),
+              // BlocBuilder<UserCubit, UserState>(
+              //   builder: (context, state) {
+              //     final user = state is UserLoaded ? state.user : widget.user;
+              //     return ProfileAvatar(
+              //         user: user, radius: 60, showEditButton: true);
+              //   },
+              // ),
+              verticalSpace(20),
               LabelWithTextField(
                 label: 'Username',
                 controller: usernameController,
                 prefixIcon: Iconsax.profile_2user,
                 hintText: 'Enter your name',
               ),
-              const SizedBox(height: 10),
+              verticalSpace(10),
               LabelWithTextField(
                 label: 'Email',
                 controller: emailController,
                 prefixIcon: Iconsax.direct,
                 hintText: 'Enter your email',
               ),
-              const SizedBox(height: 30),
+              verticalSpace(30),
               BlocConsumer<UserCubit, UserState>(
                 listener: (context, state) {
                   if (state is UserUpdated) {
@@ -89,7 +99,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               // role: widget.user.role,
                             );
                             context.read<UserCubit>().updateUser(updatedUser);
-
                           },
                     icon: const Icon(Icons.save),
                     label: Text(isLoading ? 'جاري الحفظ...' : 'حفظ التغييرات'),

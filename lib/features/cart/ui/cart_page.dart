@@ -2,6 +2,7 @@ import 'package:ecommerce_app/core/widget/custom_app_bar.dart';
 import 'package:ecommerce_app/core/widget/spacing.dart';
 import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/cart_item.dart';
+import 'package:ecommerce_app/features/cart/ui/widget/cart_loading_widget.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/empty_cart.dart';
 import 'package:ecommerce_app/features/checkout_payment/data/repos/checkout_repo_impl.dart';
 import 'package:ecommerce_app/features/checkout_payment/presentation/manger/payment_cubit.dart';
@@ -27,26 +28,7 @@ class CartPage extends StatelessWidget {
                 builder: (context, state) {
                   final cubit = BlocProvider.of<CartCubit>(context);
                   if (state is CartLoading) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'Loading your cart...',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return CartLoadingWidget();
                   } else if (state is CartLoaded) {
                     if (state.cartItems.isEmpty) {
                       return EmptyCartWidget(
@@ -388,6 +370,7 @@ class CartPage extends StatelessWidget {
                 );
               },
             );
+            
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,

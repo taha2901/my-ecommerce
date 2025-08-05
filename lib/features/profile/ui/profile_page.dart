@@ -2,14 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widget/custom_app_bar.dart';
+import 'package:ecommerce_app/core/widget/spacing.dart';
 import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
 import 'package:ecommerce_app/features/auth/ui/login_page.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/main_button.dart';
 import 'package:ecommerce_app/features/profile/ui/widget/change_password.dart';
+import 'package:ecommerce_app/features/profile/ui/widget/setting_item.dart';
 import 'package:ecommerce_app/gen/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -29,16 +30,18 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 50.h),
-                    _buildSettingItem(
+                    verticalSpace(50),
+                    SettingItem(
+                      color: Colors.black,
                         icon: Iconsax.profile_2user,
                         title: LocaleKeys.edit_profile.tr(),
                         onTap: () {
                           Navigator.of(context, rootNavigator: true)
                               .pushNamed(Routers.userProfileRoute);
                         }),
-                    SizedBox(height: 10.h),
-                    _buildSettingItem(
+                    verticalSpace(10),
+                    SettingItem(
+                      color: Colors.black,
                         icon: Iconsax.password_check4,
                         title: LocaleKeys.change_password.tr(),
                         onTap: () {
@@ -48,18 +51,21 @@ class ProfilePage extends StatelessWidget {
                                 builder: (_) => const ChangePasswordPage()),
                           );
                         }),
-                    SizedBox(height: 10.h),
-                    _buildSettingItem(
+                    verticalSpace(10),
+                   SettingItem(
+                    color: Colors.black,
                         icon: Iconsax.notification,
                         title: LocaleKeys.notifications.tr(),
                         onTap: () {}),
-                    SizedBox(height: 10.h),
-                    _buildSettingItem(
+                    verticalSpace(10),
+                    SettingItem(
+                      color: Colors.black,
                         icon: Iconsax.security_safe4,
                         title: LocaleKeys.security_guards.tr(),
                         onTap: () {}),
-                    SizedBox(height: 10.h),
-                    _buildSettingItem(
+                    verticalSpace(10),
+                   SettingItem(
+                    color: Colors.black,
                       icon: Iconsax.language_circle4,
                       title: LocaleKeys.language.tr(),
                       onTap: () async {
@@ -136,13 +142,12 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(height: 10.h),
+                    verticalSpace(10),
                     BlocConsumer<AuthCubit, AuthState>(
                       listenWhen: (previous, current) =>
                           current is AuthLogedout || current is AuthLogoutError,
                       listener: (context, state) {
                         if (state is AuthLogedout) {
-                          // print("Navigating to login screen");
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (_) => const LoginPage()),
@@ -162,7 +167,7 @@ class ProfilePage extends StatelessWidget {
                             onTap: null,
                           );
                         }
-                        return _buildSettingItem(
+                        return SettingItem(
                             color: Colors.red,
                             icon: Iconsax.logout,
                             title: LocaleKeys.logout.tr(),
@@ -174,42 +179,6 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingItem({
-    IconData? icon,
-    required String title,
-    required VoidCallback onTap,
-    Color color = Colors.black,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 10.h),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.grey.shade200,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: color,
-              ),
-              SizedBox(width: 10.h),
-              Text(title, style: const TextStyle(fontSize: 16)),
-              const Spacer(),
-              title.toLowerCase() != 'logout'
-                  ? const Icon(Icons.arrow_forward_ios, size: 16)
-                  : const SizedBox(),
             ],
           ),
         ),
