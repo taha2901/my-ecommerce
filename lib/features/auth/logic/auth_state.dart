@@ -44,7 +44,3 @@ final class GoogleAuthError extends AuthState {
   final String message;
   GoogleAuthError({required this.message});
 }
-final class AuthDoneWithRole extends AuthState {
-  final String role;
-  const AuthDoneWithRole(this.role);
-}

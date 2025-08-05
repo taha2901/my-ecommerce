@@ -98,7 +98,9 @@ class CartPage extends StatelessWidget {
                                   vertical: 6.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -114,14 +116,15 @@ class CartPage extends StatelessWidget {
                           ),
                         ),
                         verticalSpace(16),
-                        
+
                         Expanded(
                           child: SingleChildScrollView(
                             physics: const BouncingScrollPhysics(),
                             child: Column(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 16.w),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -136,7 +139,8 @@ class CartPage extends StatelessWidget {
                                   ),
                                   child: ListView.separated(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: state.cartItems.length,
                                     padding: EdgeInsets.all(8.w),
                                     itemBuilder: (context, index) {
@@ -243,7 +247,6 @@ class CartPage extends StatelessWidget {
             ],
           ),
           SizedBox(height: 20.h),
-          
           BlocBuilder<CartCubit, CartState>(
             bloc: cubit,
             buildWhen: (previous, current) => current is SubtotalUpdated,
@@ -260,7 +263,7 @@ class CartPage extends StatelessWidget {
                   SizedBox(height: 12.h),
                   _buildSummaryRow(context, 'Shipping', shipping),
                   SizedBox(height: 16.h),
-                  
+
                   // خط منقط محسن
                   Row(
                     children: List.generate(
@@ -274,7 +277,7 @@ class CartPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   SizedBox(height: 16.h),
                   Container(
                     padding: EdgeInsets.all(16.w),
@@ -336,7 +339,7 @@ class CartPage extends StatelessWidget {
     final shipping = 10.0;
     final total = subtotal + shipping;
     debugPrint('Total amount in checkout page: $total');
-    
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(

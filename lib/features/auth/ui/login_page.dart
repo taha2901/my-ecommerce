@@ -1,3 +1,11 @@
+import 'package:ecommerce_app/core/widget/spacing.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/animated_text_field.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/another_loging_widget.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/forget_pass_button_widget.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/logo_and_animition_section.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/no_account_widget.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/social_button_widget.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/welcom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,10 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
-import 'package:ecommerce_app/features/auth/ui/widget/label_with_text_field.dart';
-import 'package:ecommerce_app/features/auth/ui/widget/social_media_button.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/label_with_text_field.dart';
 import 'package:ecommerce_app/features/cart/ui/widget/main_button.dart';
-import 'package:iconsax/iconsax.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -64,7 +70,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<AuthCubit>(context);
-
     return Scaffold(
       backgroundColor: AppColors.kWhiteColor,
       body: SafeArea(
@@ -84,88 +89,26 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 40.h),
-
+                          verticalSpace(40),
                           // Logo Section with Animation
-                          Center(
-                            child: Container(
-                              width: 120.w,
-                              height: 120.h,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    AppColors.primary,
-                                    AppColors.primary.withOpacity(0.7),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withOpacity(0.3),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 10),
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                Iconsax.bag_2,
-                                size: 60.r,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 32.h),
-
+                          LogoAndAnimitionSection(),
+                          verticalSpace(32),
                           // Welcome Text
-                          Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  'مرحباً بك في ShopEase!',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 8.h),
-                                Text(
-                                  'سجل دخولك للبدء في التسوق',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        color: AppColors.grey,
-                                        height: 1.5,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(height: 40.h),
-
+                          WelcomeTextWidget(),
+                          verticalSpace(40),
                           // Form Fields
-                          _buildAnimatedTextField(
+                          AnimatedTextField(
+                            delay: 200,
                             child: LabelWithTextField(
                               label: 'البريد الإلكتروني',
                               controller: emailController,
                               prefixIcon: Icons.email_outlined,
                               hintText: 'أدخل بريدك الإلكتروني',
                             ),
-                            delay: 200,
                           ),
-
-                          SizedBox(height: 20.h),
-
-                          _buildAnimatedTextField(
+                          verticalSpace(20),
+                          AnimatedTextField(
+                            delay: 400,
                             child: LabelWithTextField(
                               label: 'كلمة المرور',
                               controller: passwordController,
@@ -186,51 +129,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 },
                               ),
                             ),
-                            delay: 400,
                           ),
-
-                          SizedBox(height: 16.h),
-
-                          // Forgot Password
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {},
-                              style: TextButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w, vertical: 4.h),
-                              ),
-                              child: Text(
-                                'نسيت كلمة المرور؟',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 32.h),
-
+                          verticalSpace(16),
+                          ForgetPasswordButton(),
+                          verticalSpace(32),
                           // Login Button
                           BlocConsumer<AuthCubit, AuthState>(
                             bloc: cubit,
                             listenWhen: (previous, current) =>
                                 current is AuthDone || current is AuthError,
                             listener: (context, state) {
-                              // if (state is AuthDone) {
-                              //   Navigator.of(context, rootNavigator: true)
-                              //       .pushNamed(Routers.homeRoute);
-                              // }
-                              if (state is AuthDoneWithRole) {
-                                if (state.role == 'admin') {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      Routers.adminDashboardRoute);
-                                } else {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed(Routers.homeRoute);
-                                }
+                              if (state is AuthDone) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamed(Routers.homeRoute);
                               } else if (state is AuthError) {
                                 _showErrorSnackBar(context, state.message);
                               }
@@ -274,104 +185,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               );
                             },
                           ),
-
-
-
-                          // BlocConsumer<AuthCubit, AuthState>(
-                          //   bloc: cubit,
-                          //   listenWhen: (previous, current) =>
-                          //       current is AuthDoneWithRole ||
-                          //       current is AuthError,
-                          //   listener: (context, state) {
-                          //     if (state is AuthDoneWithRole) {
-                          //       // ✅ تحديث التوجيه بناءً على الدور
-                          //       if (state.role == 'admin') {
-                          //         Navigator.of(context).pushReplacementNamed(
-                          //             Routers.adminDashboardRoute);
-                          //       } else {
-                          //         Navigator.of(context)
-                          //             .pushReplacementNamed(Routers.homeRoute);
-                          //       }
-                          //     } else if (state is AuthError) {
-                          //       _showErrorSnackBar(context, state.message);
-                          //     }
-                          //   },
-                          //   buildWhen: (previous, current) =>
-                          //       current is AuthLoading ||
-                          //       current is AuthError ||
-                          //       current
-                          //           is AuthDoneWithRole, // ✅ تغيير من AuthDone إلى AuthDoneWithRole
-                          //   builder: (context, state) {
-                          //     return Container(
-                          //       width: double.infinity,
-                          //       height: 56.h,
-                          //       decoration: BoxDecoration(
-                          //         gradient: LinearGradient(
-                          //           colors: [
-                          //             AppColors.primary,
-                          //             AppColors.primary.withOpacity(0.8),
-                          //           ],
-                          //         ),
-                          //         borderRadius: BorderRadius.circular(16.r),
-                          //         boxShadow: [
-                          //           BoxShadow(
-                          //             color: AppColors.primary.withOpacity(0.3),
-                          //             blurRadius: 12,
-                          //             offset: const Offset(0, 6),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //       child: MainButton(
-                          //         text: 'تسجيل الدخول',
-                          //         isLoading: state is AuthLoading,
-                          //         onTap: () async {
-                          //           if (_formKey.currentState!.validate()) {
-                          //             await cubit.loginWithEmailAndPassword(
-                          //               emailController.text,
-                          //               passwordController.text,
-                          //             );
-                          //           }
-                          //         },
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-
-                          SizedBox(height: 32.h),
-
-                          // Divider
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 1,
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                child: Text(
-                                  'أو سجل دخولك باستخدام',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: AppColors.grey,
-                                        fontSize: 14.sp,
-                                      ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  height: 1,
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 24.h),
-
+                          verticalSpace(32),
+                          AnotherLogingWidget(),
+                          verticalSpace(23),
                           // Social Media Buttons
                           BlocConsumer<AuthCubit, AuthState>(
                             bloc: cubit,
@@ -387,7 +203,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               }
                             },
                             builder: (context, state) {
-                              return _buildSocialButton(
+                              return SocialButtonWidget(
                                 text: 'تسجيل الدخول بـ Google',
                                 imgUrl:
                                     'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png',
@@ -400,10 +216,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               );
                             },
                           ),
-
-                          SizedBox(height: 16.h),
-
-                          _buildSocialButton(
+                          verticalSpace(16),
+                          SocialButtonWidget(
+                            isLoading: false,
                             text: 'تسجيل الدخول بـ Facebook',
                             imgUrl:
                                 'https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-facebook-logo-png-transparent-svg-vector-bie-supply-15.png',
@@ -411,46 +226,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             color: Colors.blue.shade50,
                             borderColor: Colors.blue.shade100,
                           ),
-
-                          SizedBox(height: 32.h),
-
+                          verticalSpace(32),
                           // Register Link
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'ليس لديك حساب؟ ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Colors.grey.shade600,
-                                      ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pushNamed(Routers.registerRoute);
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColors.primary,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4.w),
-                                  ),
-                                  child: Text(
-                                    'سجل الآن',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(height: 24.h),
+                          NoAccountWidget(),
+                          verticalSpace(24),
                         ],
                       ),
                     ),
@@ -463,57 +242,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       ),
     );
   }
-
-  Widget _buildAnimatedTextField({required Widget child, required int delay}) {
-    return TweenAnimationBuilder<double>(
-      duration: Duration(milliseconds: 800 + delay),
-      tween: Tween(begin: 0.0, end: 1.0),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 30 * (1 - value)),
-          child: Opacity(
-            opacity: value,
-            child: child,
-          ),
-        );
-      },
-      child: child,
-    );
-  }
-
-  Widget _buildSocialButton({
-    required String text,
-    required String imgUrl,
-    required VoidCallback onTap,
-    bool isLoading = false,
-    required Color color,
-    required Color borderColor,
-  }) {
-    return Container(
-      width: double.infinity,
-      height: 56.h,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: borderColor, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SocialMediaButton(
-        isLoading: isLoading,
-        text: text,
-        imgUrl: imgUrl,
-        onTap: onTap,
-      ),
-    );
-  }
-
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

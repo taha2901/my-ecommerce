@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/features/auth/data/user_data.dart';
-import 'package:ecommerce_app/features/auth/ui/widget/label_with_text_field.dart';
+import 'package:ecommerce_app/features/auth/ui/widget/login_customs/label_with_text_field.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_cubit.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_states.dart';
 import 'package:flutter/material.dart';

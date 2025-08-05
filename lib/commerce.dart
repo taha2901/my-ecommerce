@@ -3,11 +3,14 @@ import 'package:ecommerce_app/core/routings/app_router.dart';
 import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
 import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
+import 'package:ecommerce_app/features/checkout_payment/data/repos/checkout_repo_impl.dart';
+import 'package:ecommerce_app/features/checkout_payment/presentation/manger/payment_cubit.dart';
 import 'package:ecommerce_app/features/favourite/logic/cubit/favourite_cubit.dart';
 import 'package:ecommerce_app/features/home/logic/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ecommerce_app/features/location_picker/logic/location_cubit.dart';
 
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;
@@ -22,6 +25,10 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MultiBlocProvider(
             providers: [
+              BlocProvider(create: (_) => PaymenttCubit( CheckoutRepoImpl())),
+              BlocProvider<LocationCubit>(
+                create: (context) => LocationCubit(),
+              ),
               BlocProvider(create: (context) => AuthCubit()..checkAuth()),
               BlocProvider(create: (context) => HomeCubit()..getHomeData()),
               BlocProvider(
