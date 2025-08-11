@@ -4,6 +4,7 @@ import 'package:ecommerce_app/features/cart/ui/cart_page.dart';
 import 'package:ecommerce_app/features/favourite/ui/favourite_page.dart';
 import 'package:ecommerce_app/features/home/ui/home_page.dart';
 import 'package:ecommerce_app/features/profile/ui/profile_page.dart';
+import 'package:ecommerce_app/features/search/ui/search_page.dart';
 import 'package:ecommerce_app/gen/locale_keys.g.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
     return [
       const HomePage(),
       const CartPage(),
+      const SearchPage(),
       const FavoritesPage(),
       const ProfilePage(),
     ];
@@ -46,6 +48,12 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.cart),
         title: LocaleKeys.cart.tr(),
+        activeColorPrimary: Theme.of(context).primaryColor,
+        inactiveColorPrimary: AppColors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.search),
+        title: 'search'.tr(),
         activeColorPrimary: Theme.of(context).primaryColor,
         inactiveColorPrimary: AppColors.grey,
       ),

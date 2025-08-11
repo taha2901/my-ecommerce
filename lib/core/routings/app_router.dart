@@ -1,10 +1,16 @@
 import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/core/widget/cutome_bottom_nav_bar.dart';
+import 'package:ecommerce_app/core/widget/splash_screen.dart';
+import 'package:ecommerce_app/features/admin/ui/admin_dashbord.dart';
+import 'package:ecommerce_app/features/admin/ui/widget/admin_order_management,dart';
+import 'package:ecommerce_app/features/admin/ui/widget/admin_product.dart';
+import 'package:ecommerce_app/features/admin/ui/widget/admin_user_managment.dart';
 import 'package:ecommerce_app/features/auth/ui/register_page.dart';
 import 'package:ecommerce_app/features/cart/ui/cart_page.dart';
 import 'package:ecommerce_app/features/home/logic/products_details_cubit/product_details_cubit.dart';
 import 'package:ecommerce_app/features/home/ui/product_details_page.dart';
 import 'package:ecommerce_app/features/profile/ui/user_profile.dart';
+import 'package:ecommerce_app/features/vendor/vendor_dashbord.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/ui/login_page.dart';
@@ -14,6 +20,9 @@ class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     final arguments = settings.arguments;
     switch (settings.name) {
+  //     case Routers.splashRoute:
+  // return MaterialPageRoute(builder: (_) => const SplashScreen());
+
       case Routers.homeRoute:
         return MaterialPageRoute(
           builder: (_) => const CustomBottomNavbar(),
@@ -41,6 +50,32 @@ class AppRouter {
               productId: productId,
             ),
           ),
+          settings: settings,
+        );
+      case Routers.adminDashboardRoute:
+        return MaterialPageRoute(
+          builder: (_) => AdminHomePage(),
+          settings: settings,
+        );
+
+      case Routers.adminVendorRoute:
+        return MaterialPageRoute(
+          builder: (_) => VendorDashboardPage(),
+          settings: settings,
+        );
+      case Routers.adminProductsRoute:
+        return MaterialPageRoute(
+          builder: (_) => AdminProductsPage(),
+          settings: settings,
+        );
+      case Routers.adminOrdersRoute:
+        return MaterialPageRoute(
+          builder: (_) => AdminOrdersPage(),
+          settings: settings,
+        );
+      case Routers.adminUsersRoute:
+        return MaterialPageRoute(
+          builder: (_) => AdminUsersPage(),
           settings: settings,
         );
 

@@ -1,0 +1,556 @@
+import 'package:ecommerce_app/core/utils/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class AdminOrdersPage extends StatefulWidget {
+  const AdminOrdersPage({Key? key}) : super(key: key);
+
+  @override
+  State<AdminOrdersPage> createState() => _AdminOrdersPageState();
+}
+
+class _AdminOrdersPageState extends State<AdminOrdersPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  // Mock data for orders
+  final List<Map<String, dynamic>> orders = [
+    {
+      'id': '#12345',
+      'customerName': 'أحمد محمد',
+      'customerEmail': 'ahmed@example.com',
+      'date': '2024-01-15',
+      'status': 'pending',
+      'total': 299.99,
+      'items': 3,
+      'address': 'الرياض، السعودية',
+    },
+    {
+      'id': '#12346',
+      'customerName': 'فاطمة علي',
+      'customerEmail': 'fatima@example.com',
+      'date': '2024-01-14',
+      'status': 'processing',
+      'total': 150.50,
+      'items': 2,
+      'address': 'جدة، السعودية',
+    },
+    {
+      'id': '#12347',
+      'customerName': 'محمد السالم',
+      'customerEmail': 'mohamed@example.com',
+      'date': '2024-01-13',
+      'status': 'shipped',
+      'total': 89.99,
+      'items': 1,
+      'address': 'الدمام، السعودية',
+    },
+    {
+      'id': '#12348',
+      'customerName': 'نورا أحمد',
+      'customerEmail': 'nora@example.com',
+      'date': '2024-01-12',
+      'status': 'delivered',
+      'total': 450.00,
+      'items': 5,
+      'address': 'المدينة المنورة، السعودية',
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.kWhiteColor,
+      appBar: AppBar(
+        title: const Text('إدارة الطلبات'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        bottom: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          tabs: const [
+            Tab(text: 'الكل'),
+            Tab(text: 'قيد الانتظار'),
+            Tab(text: 'قيد المعالجة'),
+            Tab(text: 'تم الشحن'),
+            Tab(text: 'تم التسليم'),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          // Statistics Cards
+          Container(
+            padding: EdgeInsets.all(16.w),
+            color: AppColors.primary.withOpacity(0.05),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard(
+                    title: 'إجمالي الطلبات',
+                    value: '${orders.length}',
+                    icon: Icons.shopping_bag,
+                    color: Colors.blue,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: _buildStatCard(
+                    title: 'قيد الانتظار',
+                    value: '${_getOrdersByStatus('pending').length}',
+                    icon: Icons.pending,
+                    color: Colors.orange,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: _buildStatCard(
+                    title: 'تم التسليم',
+                    value: '${_getOrdersByStatus('delivered').length}',
+                    icon: Icons.check_circle,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Search Bar
+          Container(
+            padding: EdgeInsets.all(16.w),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'البحث برقم الطلب أو اسم العميل...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+              ),
+            ),
+          ),
+
+          // Orders List with Tabs
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildOrdersList(orders),
+                _buildOrdersList(_getOrdersByStatus('pending')),
+                _buildOrdersList(_getOrdersByStatus('processing')),
+                _buildOrdersList(_getOrdersByStatus('shipped')),
+                _buildOrdersList(_getOrdersByStatus('delivered')),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 24.r),
+          SizedBox(height: 8.h),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.grey.shade600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrdersList(List<Map<String, dynamic>> orderList) {
+    if (orderList.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.shopping_bag_outlined,
+              size: 80.r,
+              color: Colors.grey.shade400,
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'لا توجد طلبات',
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      itemCount: orderList.length,
+      itemBuilder: (context, index) {
+        final order = orderList[index];
+        return _buildOrderCard(order);
+      },
+    );
+  }
+
+  Widget _buildOrderCard(Map<String, dynamic> order) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.all(16.w),
+            leading: Container(
+              width: 50.w,
+              height: 50.h,
+              decoration: BoxDecoration(
+                color: _getStatusColor(order['status']).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Icon(
+                _getStatusIcon(order['status']),
+                color: _getStatusColor(order['status']),
+                size: 24.r,
+              ),
+            ),
+            title: Row(
+              children: [
+                Text(
+                  order['id'],
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(order['status']).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Text(
+                    _getStatusText(order['status']),
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: _getStatusColor(order['status']),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 8.h),
+                Text(
+                  'العميل: ${order['customerName']}',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'التاريخ: ${order['date']}',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                Text(
+                  'العناصر: ${order['items']} • المجموع: \$${order['total']}',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12.r),
+                bottomRight: Radius.circular(12.r),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'العنوان: ${order['address']}',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => _showOrderDetails(order),
+                      icon: Icon(Icons.visibility, size: 20.r),
+                      tooltip: 'عرض التفاصيل',
+                    ),
+                    IconButton(
+                      onPressed: () => _showUpdateStatusDialog(order),
+                      icon: Icon(Icons.edit, size: 20.r),
+                      tooltip: 'تحديث الحالة',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Map<String, dynamic>> _getOrdersByStatus(String status) {
+    return orders.where((order) => order['status'] == status).toList();
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'pending':
+        return Colors.orange;
+      case 'processing':
+        return Colors.blue;
+      case 'shipped':
+        return Colors.purple;
+      case 'delivered':
+        return Colors.green;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  IconData _getStatusIcon(String status) {
+    switch (status) {
+      case 'pending':
+        return Icons.pending;
+      case 'processing':
+        return Icons.autorenew;
+      case 'shipped':
+        return Icons.local_shipping;
+      case 'delivered':
+        return Icons.check_circle;
+      default:
+        return Icons.help;
+    }
+  }
+
+  String _getStatusText(String status) {
+    switch (status) {
+      case 'pending':
+        return 'قيد الانتظار';
+      case 'processing':
+        return 'قيد المعالجة';
+      case 'shipped':
+        return 'تم الشحن';
+      case 'delivered':
+        return 'تم التسليم';
+      default:
+        return 'غير محدد';
+    }
+  }
+
+  void _showOrderDetails(Map<String, dynamic> order) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('تفاصيل الطلب ${order['id']}'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDetailRow('العميل:', order['customerName']),
+              _buildDetailRow('البريد الإلكتروني:', order['customerEmail']),
+              _buildDetailRow('التاريخ:', order['date']),
+              _buildDetailRow('الحالة:', _getStatusText(order['status'])),
+              _buildDetailRow('العناصر:', '${order['items']}'),
+              _buildDetailRow('المجموع:', '\$${order['total']}'),
+              _buildDetailRow('العنوان:', order['address']),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إغلاق'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100.w,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14.sp,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 14.sp),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUpdateStatusDialog(Map<String, dynamic> order) {
+    String selectedStatus = order['status'];
+    
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text('تحديث حالة الطلب ${order['id']}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('قيد الانتظار'),
+                value: 'pending',
+                groupValue: selectedStatus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('قيد المعالجة'),
+                value: 'processing',
+                groupValue: selectedStatus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('تم الشحن'),
+                value: 'shipped',
+                groupValue: selectedStatus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('تم التسليم'),
+                value: 'delivered',
+                groupValue: selectedStatus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('إلغاء'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  order['status'] = selectedStatus;
+                });
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث حالة الطلب بنجاح')),
+                );
+              },
+              child: const Text('تحديث'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

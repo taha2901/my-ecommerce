@@ -3,7 +3,6 @@ import 'package:ecommerce_app/features/auth/data/user_data.dart';
 import 'package:ecommerce_app/features/auth/ui/widget/login_customs/label_with_text_field.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_cubit.dart';
 import 'package:ecommerce_app/features/profile/logic/user_cubit/user_states.dart';
-import 'package:ecommerce_app/features/profile/ui/widget/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -52,13 +51,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: SingleChildScrollView(
             child: Column(children: [
               verticalSpace(20),
-              // BlocBuilder<UserCubit, UserState>(
-              //   builder: (context, state) {
-              //     final user = state is UserLoaded ? state.user : widget.user;
-              //     return ProfileAvatar(
-              //         user: user, radius: 60, showEditButton: true);
-              //   },
-              // ),
               verticalSpace(20),
               LabelWithTextField(
                 label: 'Username',
@@ -94,6 +86,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             final updatedUser = UserData(
                               id: widget.user.id,
                               username: usernameController.text,
+                              role: widget.user.role,
                               email: emailController.text,
                               createdAt: widget.user.createdAt,
                               // role: widget.user.role,

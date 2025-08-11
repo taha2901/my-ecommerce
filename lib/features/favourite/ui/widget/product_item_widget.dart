@@ -1,15 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app/core/widget/spacing.dart';
 import 'package:ecommerce_app/features/favourite/logic/cubit/favourite_cubit.dart';
-import 'package:ecommerce_app/features/home/logic/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductItemWidget extends StatelessWidget {
- final BuildContext context;
-  final  dynamic product;
-  final  FavouriteCubit favoriteCubit;
-  const ProductItemWidget({super.key, required this.context, this.product, required this.favoriteCubit});
+  final dynamic product;
+  final FavouriteCubit favoriteCubit;
+  const ProductItemWidget(
+      {super.key, this.product, required this.favoriteCubit});
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +26,11 @@ class ProductItemWidget extends StatelessWidget {
               border: Border.all(color: Colors.grey[200]!),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                product.imgUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey[100],
-                  child: Icon(
-                    Icons.image_not_supported_outlined,
-                    color: Colors.grey[400],
-                    size: 24.sp,
-                  ),
-                ),
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: product.imgUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
                     color: Colors.grey[100],
                     child: Center(
                       child: CircularProgressIndicator(
@@ -49,10 +39,16 @@ class ProductItemWidget extends StatelessWidget {
                             AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.grey[100],
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      color: Colors.grey[400],
+                      size: 24.sp,
+                    ),
+                  ),
+                )),
           ),
           verticalSpace(16),
           // Product Info
@@ -135,16 +131,6 @@ class ProductItemWidget extends StatelessWidget {
                   ),
                 );
               }
-
-              if (state is FavouriteRemoved && state.productId == product.id) {
-                // تحديث صفحة الهوم عند حذف عنصر من المفضلة
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  BlocProvider.of<HomeCubit>(context).getHomeData();
-                  // إعادة تحميل قائمة المفضلة لتحديث UI
-                  favoriteCubit.getFavoriteProducts();
-                });
-              }
-
               return Container(
                 width: 40.w,
                 height: 40.h,
@@ -172,7 +158,6 @@ class ProductItemWidget extends StatelessWidget {
       ),
     );
   }
-
 
   void _showDeleteConfirmation(
     BuildContext context,
@@ -229,8 +214,6 @@ class ProductItemWidget extends StatelessWidget {
                 await favoriteCubit.removeFavorite(product.id, context);
                 // تحديث فوري لصفحة المفضلة
                 await favoriteCubit.getFavoriteProducts();
-                // تحديث صفحة الهوم لتحديث حالة القلوب
-                // BlocProvider.of<HomeCubit>(context).getHomeData();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red[600],

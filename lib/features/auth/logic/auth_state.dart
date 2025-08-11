@@ -5,11 +5,11 @@ sealed class AuthState {
 }
 
 final class AuthInitial extends AuthState {}
-
+final class AuthChecking extends AuthState {} 
 final class AuthLoading extends AuthState {}
-
-final class AuthDone extends AuthState {
-  const AuthDone();
+class AuthSuccess extends AuthState {
+  final UserData userData;
+  AuthSuccess({required this.userData});
 }
 
 final class AuthError extends AuthState {
@@ -17,7 +17,7 @@ final class AuthError extends AuthState {
   AuthError({required this.message});
 }
 
-//logout
+
 
 final class AuthLogingout extends AuthState {
   const AuthLogingout();

@@ -8,16 +8,6 @@ abstract class HomeServices {
   Future<List<ProductItemModel>> fetchProducts();
   Future<List<HomeCarouselItemModel>> fetchHomeCarouselItems();
   Future<List<CategoryModel>> fetchCategories();
-  // Future<List<ProductItemModel>> fetchFavouriteProducts(
-  //     {required String userId});
-  // Future<void> addFavouriteProduct({
-  //   required String userId,
-  //   required ProductItemModel product, // عشان هخزنو كاملا
-  // });
-  // Future<void> removeFavouriteProduct({
-  //   required String userId,
-  //   required String productId, 
-  // });
 }
 
 class HomeServicesImpl implements HomeServices {

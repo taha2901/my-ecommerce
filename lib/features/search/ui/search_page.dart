@@ -10,82 +10,84 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Products'),
-        centerTitle: true,
-        elevation: 1,
-      ),
-      body: Column(
-        children: [
-          // 🔍 Search Field
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              onChanged: (value) =>
-                  context.read<SearchCubit>().searchProducts(value),
-              decoration: InputDecoration(
-                hintText: 'Search for products...',
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
+    return BlocProvider(
+      create: (context) => SearchCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Search Products'),
+          centerTitle: true,
+          elevation: 1,
+        ),
+        body: Column(
+          children: [
+            // 🔍 Search Field
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                onChanged: (value) =>
+                    context.read<SearchCubit>().searchProducts(value),
+                decoration: InputDecoration(
+                  hintText: 'Search for products...',
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // 📦 Results
-          Expanded(
-            child: BlocBuilder<SearchCubit, SearchState>(
-              builder: (context, state) {
-                if (state is SearchLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is SearchLoaded) {
-                  final results = state.results;
+            // 📦 Results
+            Expanded(
+              child: BlocBuilder<SearchCubit, SearchState>(
+                builder: (context, state) {
+                  if (state is SearchLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is SearchLoaded) {
+                    final results = state.results;
 
-                  if (results.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "No products found 🧐",
-                        style: TextStyle(fontSize: 16),
-                      ),
+                    if (results.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          "No products found 🧐",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      );
+                    }
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: results.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (_, index) {
+                        final product = results[index];
+                        return ProductCard(product: product);
+                      },
                     );
+                  } else if (state is SearchError) {
+                    return Center(child: Text("❌ ${state.message}"));
                   }
 
-                  return ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: results.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (_, index) {
-                      final product = results[index];
-                      return ProductCard(product: product);
-                    },
+                  return const Center(
+                    child: Text(
+                      "Start typing to search 🕵️‍♂️",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   );
-                } else if (state is SearchError) {
-                  return Center(child: Text("❌ ${state.message}"));
-                }
-
-                return const Center(
-                  child: Text(
-                    "Start typing to search 🕵️‍♂️",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                );
-              },
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
 
 class ProductCard extends StatelessWidget {
   final ProductItemModel product;
@@ -125,8 +127,8 @@ class ProductCard extends StatelessWidget {
                       product.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 6),
                     Text(

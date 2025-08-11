@@ -59,7 +59,7 @@ class FavoritesPage extends StatelessWidget {
           },
         );
       }
-      return LoadedStateWidget(context:  context, favoriteProducts:  favoriteProducts,favoriteCubit:  favoriteCubit);
+      return LoadedStateWidget( favoriteProducts:  favoriteProducts,favoriteCubit:  favoriteCubit);
     } else if (state is FavouriteError) {
       return ErrorStateWidget(errorMessage: state.errorMessage);
     }

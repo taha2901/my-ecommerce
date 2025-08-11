@@ -2,10 +2,12 @@ class UserData {
   final String id;
   final String username;
   final String email;
+  final String role; 
   final String createdAt;
 
-  UserData({
+  UserData( {
     required this.id,
+    required this.role,
     required this.username,
     required this.email,
     required this.createdAt,
@@ -15,6 +17,7 @@ class UserData {
     return {
       'username': username,
       'email': email,
+      'role': role, // إضافة الدور
       'createdAt': createdAt
     };
   }
@@ -23,6 +26,7 @@ class UserData {
     return UserData(
       id: id,
       username: map['username'] ?? '',
+      role: map['role'] ?? 'user', // تعيين دور افتراضي للمستخدم
       email: map['email'] ?? '',
       createdAt: map['createdAt'] ?? '',
     );
@@ -33,19 +37,21 @@ class UserData {
     String? id,
     String? username,
     String? email,
+    String? role,
     String? createdAt,
   }) {
     return UserData(
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
+      role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 
   @override
   String toString() {
-    return 'UserData(id: $id, username: $username, email: $email, createdAt: $createdAt)';
+    return 'UserData(id: $id, username: $username, email: $email, createdAt: $createdAt , role: $role)';
   }
 }
 

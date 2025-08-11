@@ -7,11 +7,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+
 // cart -> checkout -> PaymentMethodsBottomSheet -> CustomButtonBlocConsumer
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 1️⃣ Stripe config
   Stripe.publishableKey = ApiKeys.publicKey;
+  await EasyLocalization.ensureInitialized();
 
   // 2️⃣ Firebase
   await Firebase.initializeApp(

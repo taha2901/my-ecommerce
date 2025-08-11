@@ -11,33 +11,84 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthServices authServices = AuthServicesImpl();
   final firestoreServices = FirestoreServices.instance;
 
+  // Future<void> loginWithEmailAndPassword(String email, String password) async {
+  //   emit(AuthLoading());
+  //   try {
+  //     final result =
+  //         await authServices.loginWithEmailAndPassword(email, password);
+  //     if (result != null) {
+  //       emit(AuthDone());
+  //     } else {
+  //       emit(AuthError(message: "Invalid email or password"));
+  //     }
+  //   } catch (e) {
+  //     emit(AuthError(message: "Error: $e"));
+  //   }
+  // }
+
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     emit(AuthLoading());
     try {
-      final result =
+      final user =
           await authServices.loginWithEmailAndPassword(email, password);
-      if (result) {
-        emit(AuthDone());
+      if (user != null) {
+        final userData = await firestoreServices.getDocument<UserData>(
+          path: ApiPaths.users(user.uid),
+          builder: (data, id) => UserData.fromMap(data, id),
+        );
+
+        emit(AuthSuccess(userData: userData));
       } else {
         emit(AuthError(message: "Invalid email or password"));
       }
     } catch (e) {
-      emit(AuthError(message: "Error: $e"));
+      emit(AuthError(message: "Login failed: $e"));
     }
   }
 
+  // Future<void> registerWithEmailAndPassword(
+  //     String email, String password, String username) async {
+  //   emit(AuthLoading());
+  //   try {
+  //     final result =
+  //         await authServices.registerWithEmailAndPassword(email, password);
+  //     if (result) {
+  //       await _saveUserData(
+  //         email,
+  //         username,
+  //       );
+  //       emit(AuthDone());
+  //     } else {
+  //       emit(AuthError(message: "Invalid email or password"));
+  //     }
+  //   } catch (e) {
+  //     emit(AuthError(message: "Error: $e"));
+  //   }
+  // }
   Future<void> registerWithEmailAndPassword(
       String email, String password, String username) async {
     emit(AuthLoading());
     try {
-      final result =
+      final user =
           await authServices.registerWithEmailAndPassword(email, password);
-      if (result) {
-        await _saveUserData(
-          email,
-          username,
+      if (user != null) {
+        // أنشئ userData بنفسك هنا
+        final userData = UserData(
+          id: user.uid,
+          username: username,
+          email: email,
+          role: 'user', // ← أي دور افتراضي
+          createdAt: DateTime.now().toIso8601String(),
         );
-        emit(AuthDone());
+
+        // خزنه في Firestore
+        await firestoreServices.setData(
+          path: ApiPaths.users(user.uid),
+          data: userData.toMap(),
+        );
+
+        // ثم ابعته مع الحالة
+        emit(AuthSuccess(userData: userData));
       } else {
         emit(AuthError(message: "Invalid email or password"));
       }
@@ -46,12 +97,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> _saveUserData(String email, String username) async {
-    final currentUser = authServices.currentUser();
+  Future<void> saveUserData(
+      String userId, String email, String username) async {
     final userData = UserData(
-      id: currentUser!.uid,
+      id: userId,
       username: username,
       email: email,
+      role: 'user', // 👈 هنا نحدد الدور
       createdAt: DateTime.now().toIso8601String(),
     );
 
@@ -60,10 +112,29 @@ class AuthCubit extends Cubit<AuthState> {
       data: userData.toMap(),
     );
   }
-  void checkAuth() {
+
+  // void checkAuth() {
+  //   final user = authServices.currentUser();
+  //   if (user != null) {
+  //     emit(const AuthDone());
+  //   }
+  // }
+
+    void checkAuth() async {
+    emit(AuthChecking()); // حالة جديدة للتحقق الأولي
     final user = authServices.currentUser();
     if (user != null) {
-      emit(const AuthDone());
+      try {
+        final userData = await firestoreServices.getDocument<UserData>(
+          path: ApiPaths.users(user.uid),
+          builder: (data, id) => UserData.fromMap(data, id),
+        );
+        emit(AuthSuccess(userData: userData));
+      } catch (e) {
+        emit(AuthError(message: "Error fetching user data: $e"));
+      }
+    } else {
+      emit(AuthInitial()); // لا يوجد مستخدم مسجل دخول
     }
   }
 
@@ -71,25 +142,9 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLogingout());
     try {
       await authServices.logOut();
-      // print("Logged out successfully");
       emit(AuthLogedout());
     } catch (e) {
-      // print("Logout error: $e");
       emit(AuthLogoutError(message: "Error: $e"));
     }
   }
-
-  // Future<void> signInWithGoogle() async {
-  //   emit(GoogleAuthunticated());
-  //   try {
-  //     final result = await authServices.signInWithGoogle();
-  //     if (result) {
-  //       emit(GoogleAuthDone());
-  //     } else {
-  //       emit(GoogleAuthError(message: "Error: $result"));
-  //     }
-  //   } catch (e) {
-  //     emit(GoogleAuthError(message: "Error: $e"));
-  //   }
-  // }
 }

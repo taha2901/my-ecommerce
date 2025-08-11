@@ -1,18 +1,23 @@
+// Flutter SDK
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
+// Third-party packages
 import 'package:easy_localization/easy_localization.dart';
+// Core
 import 'package:ecommerce_app/core/routings/routers.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widget/custom_app_bar.dart';
 import 'package:ecommerce_app/core/widget/spacing.dart';
+// Features - Auth
 import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
-import 'package:ecommerce_app/features/auth/ui/login_page.dart';
-import 'package:ecommerce_app/features/cart/ui/widget/main_button.dart';
+// Features - Profile
+import 'package:ecommerce_app/features/profile/ui/widget/language_dialouge.dart';
+import 'package:ecommerce_app/features/profile/ui/widget/logout_button_widget.dart';
 import 'package:ecommerce_app/features/profile/ui/widget/change_password.dart';
 import 'package:ecommerce_app/features/profile/ui/widget/setting_item.dart';
+// Localization
 import 'package:ecommerce_app/gen/locale_keys.g.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconsax/iconsax.dart';
-
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -32,7 +37,7 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     verticalSpace(50),
                     SettingItem(
-                      color: Colors.black,
+                        color: Colors.black,
                         icon: Iconsax.profile_2user,
                         title: LocaleKeys.edit_profile.tr(),
                         onTap: () {
@@ -41,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                         }),
                     verticalSpace(10),
                     SettingItem(
-                      color: Colors.black,
+                        color: Colors.black,
                         icon: Iconsax.password_check4,
                         title: LocaleKeys.change_password.tr(),
                         onTap: () {
@@ -52,130 +57,31 @@ class ProfilePage extends StatelessWidget {
                           );
                         }),
                     verticalSpace(10),
-                   SettingItem(
-                    color: Colors.black,
+                    SettingItem(
+                        color: Colors.black,
                         icon: Iconsax.notification,
                         title: LocaleKeys.notifications.tr(),
                         onTap: () {}),
                     verticalSpace(10),
                     SettingItem(
-                      color: Colors.black,
+                        color: Colors.black,
                         icon: Iconsax.security_safe4,
                         title: LocaleKeys.security_guards.tr(),
                         onTap: () {}),
                     verticalSpace(10),
-                   SettingItem(
-                    color: Colors.black,
+                    SettingItem(
+                      color: Colors.black,
                       icon: Iconsax.language_circle4,
                       title: LocaleKeys.language.tr(),
-                      onTap: () async {
-                        final currentLocale = Localizations.localeOf(context);
-                        Locale? selectedLocale = currentLocale;
-                        await showDialog(
+                      onTap: () {
+                        showDialog(
                           context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(LocaleKeys.select_language.tr()),
-                              content: StatefulBuilder(
-                                builder: (context, setState) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      RadioListTile<Locale>(
-                                        activeColor: AppColors.primary,
-                                        value: const Locale('en'),
-                                        groupValue: selectedLocale,
-                                        title: Text(
-                                          LocaleKeys.language_english.tr(),
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedLocale = value;
-                                          });
-                                        },
-                                      ),
-                                      RadioListTile<Locale>(
-                                        activeColor: AppColors.primary,
-                                        value: const Locale('ar'),
-                                        groupValue: selectedLocale,
-                                        title: Text(
-                                          LocaleKeys.language_arabic.tr(),
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedLocale = value;
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text(
-                                    LocaleKeys.cancel.tr(),
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    if (selectedLocale != null &&
-                                        selectedLocale != currentLocale) {
-                                      await context.setLocale(selectedLocale!);
-                                    }
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    LocaleKeys.ok.tr(),
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                          builder: (_) => const LanguageDialog(),
                         );
                       },
                     ),
                     verticalSpace(10),
-                    BlocConsumer<AuthCubit, AuthState>(
-                      listenWhen: (previous, current) =>
-                          current is AuthLogedout || current is AuthLogoutError,
-                      listener: (context, state) {
-                        if (state is AuthLogedout) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (_) => const LoginPage()),
-                            (route) => false,
-                          );
-                        } else if (state is AuthLogoutError) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(state.message)));
-                        }
-                      },
-                      buildWhen: (previous, current) =>
-                          current is AuthLogingout,
-                      builder: (context, state) {
-                        if (state is AuthLogingout) {
-                          return MainButton(
-                            isLoading: true,
-                            onTap: null,
-                          );
-                        }
-                        return SettingItem(
-                            color: Colors.red,
-                            icon: Iconsax.logout,
-                            title: LocaleKeys.logout.tr(),
-                            onTap: () async {
-                              await cubit.logOut();
-                            });
-                      },
-                    ),
+                    LogoutButtonWidget(cubit: cubit),
                   ],
                 ),
               ),

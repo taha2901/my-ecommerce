@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:ecommerce_app/core/routings/app_router.dart';
 import 'package:ecommerce_app/core/routings/routers.dart';
+import 'package:ecommerce_app/core/utils/api_key.dart';
 import 'package:ecommerce_app/features/auth/logic/auth_cubit.dart';
 import 'package:ecommerce_app/features/cart/logic/cart/cart_cubit.dart';
 import 'package:ecommerce_app/features/checkout_payment/data/repos/checkout_repo_impl.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => PaymenttCubit( CheckoutRepoImpl())),
+              BlocProvider(create: (_) => PaymenttCubit(CheckoutRepoImpl())),
               BlocProvider(create: (_) => UserCubit()..getUserData()),
               BlocProvider<LocationCubit>(
                 create: (context) => LocationCubit(),
@@ -42,9 +43,21 @@ class MyApp extends StatelessWidget {
               return BlocBuilder<AuthCubit, AuthState>(
                 bloc: authCubit,
                 buildWhen: (previous, current) =>
-                    current is AuthDone || current is AuthInitial,
+                    current is AuthSuccess || current is AuthInitial,
                 builder: (context, state) {
+                  String initialRoute = Routers.loginRoute;
+                  if (state is AuthSuccess) {
+                    final role = state.userData.role;
+                    if (role == 'admin') {
+                      initialRoute = Routers.adminDashboardRoute;
+                    } else if (role == 'vendor') {
+                      initialRoute = Routers.adminVendorRoute;
+                    } else {
+                      initialRoute = Routers.homeRoute;
+                    }
+                  }
                   return MaterialApp(
+                    navigatorKey: ApiKeys().navigatorKey,
                     builder: (context, child) => Directionality(
                       textDirection: context.locale.languageCode == 'ar'
                           ? TextDirection.rtl
@@ -61,11 +74,7 @@ class MyApp extends StatelessWidget {
                           ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                       useMaterial3: true,
                     ),
-                    initialRoute: state is AuthDone
-                        ? Routers.homeRoute
-                        : Routers.loginRoute,
-                    // initialRoute: Routers.splashRoute,
-
+                    initialRoute: initialRoute,
                     onGenerateRoute: appRouter.generateRoute,
                   );
                 },

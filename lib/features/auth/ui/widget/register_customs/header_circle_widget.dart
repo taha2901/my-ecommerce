@@ -7,16 +7,10 @@ import 'package:iconsax/iconsax.dart';
 class HeaderCircleWidget extends StatelessWidget {
   const HeaderCircleWidget({
     super.key,
-    required Animation<double> scaleAnimation,
-  }) : _scaleAnimation = scaleAnimation;
-
-  final Animation<double> _scaleAnimation;
-
+  });
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: Center(
+    return  Center(
         child: Container(
           width: 100.w,
           height: 100.h,
@@ -44,7 +38,6 @@ class HeaderCircleWidget extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-      ),
-    );
+      );
   }
 }
