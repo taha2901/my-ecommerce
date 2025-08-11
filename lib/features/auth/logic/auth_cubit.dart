@@ -84,7 +84,8 @@ class AuthCubit extends Cubit<AuthState> {
         // خزنه في Firestore
         await firestoreServices.setData(
           path: ApiPaths.users(user.uid),
-          data: userData.toMap(),
+          // data: userData.toMap(),
+          data: userData.copyWith(role: 'user').toMap(),
         );
 
         // ثم ابعته مع الحالة
