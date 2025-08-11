@@ -13,6 +13,8 @@ class AdminHomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.kWhiteColor,
       appBar: AppBar(
+        //remove the leading icon if not needed
+        automaticallyImplyLeading: false,
         title: const Text('لوحة التحكم الإداري'),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
